@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="api-template-demo">
     <p>{{ text }}</p>
     <p>{{ data.text }}</p>
     <!-- ref 用来挂载对象 -->
     <p ref="refEl">{{ str }}</p>
     <p ref="refEls" v-for="n in 3" :key="n">列表 {{ n }}</p>
+
   </div>
 </template>
 
@@ -68,4 +69,20 @@ onBeforeUpdate(() => {
 onUpdated(() => {
   console.log('onUpdated')
 })
+
+// css bind 变量
+const theme = reactive({
+  color: 'skyblue'
+})
+setInterval(() => {
+  theme.color = theme.color === 'skyblue' 
+    ? 'unset' 
+    : 'skyblue'
+}, 1000)
 </script>
+
+<style>
+  .api-template-demo {
+    color: v-bind('theme.color');
+  }
+</style>
