@@ -12,15 +12,15 @@ export default {
   directives: {
     blue: {
       created(el) {
-        el.style.background = 'skyblue'
+        el.style.color = '#fff'
+        el.style.background = 'blue'
       }
     } 
   },
   setup(props, ctx) {
     let text = ref('内容')
-
-    let blueDirective = resolveDirective('blue')
-    let ElButton = resolveComponent('el-button')
+    let blueDirective = resolveDirective('blue') // 解析指令
+    let ElButton = resolveComponent('el-button') // 解析组件
 
     return () => h('div', [
       h('p', h(ElButton, {
@@ -32,7 +32,7 @@ export default {
         onClick: withModifiers(event => {
           console.log('onClick', event)
         }, ['stop'])
-      }, () => '点击')),
+      }, () => '点击触发 onClick')),
       // 带指令
       withDirectives(
         h('p', 'v-model 双向绑定值：' + text.value),

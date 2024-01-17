@@ -40,11 +40,15 @@
       children: [
         {
           path: '/api/template',
-          label: '模板'
+          label: '模板渲染'
         },
         {
-          path: '/api/watch',
-          label: '计算属性，监听'
+          path: '/api/computed-watch',
+          label: '计算，监听属性'
+        },
+        {
+          path: '/api/directive',
+          label: '指令'
         },
         {
           path: '/api/comp',

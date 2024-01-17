@@ -1,7 +1,8 @@
 <template>
   <div>
-    <p>v-model <input v-model="_text"></p>
-    <p>v-model:title <input v-model="_title"></p>
+    <h3>我是子组件</h3>
+    <p>v-model <el-input v-model="text" placeholder="请输入" /></p>
+    <p>v-model:title <el-input v-model="title" placeholder="请输入" /></p>
   </div>
 </template>
 
@@ -14,25 +15,26 @@
   } from 'vue'
 
   // 注入依赖值 参数2是默认值
-  let compIndexData = inject('compIndex', {})
-  console.log('inject 获取数据', compIndexData)
+  let injectData = inject('parentData', {})
+  console.log('获取到 inject 数据', injectData)
 
-  // props
+  // 定义 props
   let props = defineProps({
     modelValue: String,
-    // Modifiers 结尾的 props 用来接收对应 prop 的修饰参数
+    // Modifiers 结尾，接收对应属性的修饰参数
     modelModifiers: Object,
     title: String,
     titleModifiers: Object,
   })
 
-  // 定义 emit 配置
+  // 定义 emit
   let emit = defineEmits([
     'update:modelValue',
     'update:title'
   ])
 
-  let _text = computed({
+  // 双向绑定
+  let text = computed({
     get() {
       return props.modelValue
     },
@@ -41,7 +43,7 @@
     }
   })
 
-  let _title = computed({
+  let title = computed({
     get() {
       return props.title
     },
@@ -50,8 +52,8 @@
     }
   })
 
-  console.log('获取到 props 中 v-model 的修饰参数：', props.modelModifiers)
-  console.log('获取到 props 中 v-model:title 的修饰参数：', props.titleModifiers)
+  console.log('props 中 v-model 的修饰参数：', props.modelModifiers)
+  console.log('props 中 v-model:title 的修饰参数：', props.titleModifiers)
 </script>
 
 <style>

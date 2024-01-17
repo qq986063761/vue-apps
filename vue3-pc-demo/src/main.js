@@ -6,6 +6,7 @@ import ElementPlus from 'element-plus'
 import App from './App.vue'
 import router from './router'
 
+// 创建 vue 应用
 const app = createApp(App)
 
 // 错误监听

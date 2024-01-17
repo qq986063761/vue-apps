@@ -1,11 +1,27 @@
 <template>
   <div class="api-template-demo">
-    <p>{{ text }}</p>
-    <p>{{ data.text }}</p>
-    <!-- ref 用来挂载对象 -->
-    <p ref="refEl">{{ str }}</p>
-    <p ref="refEls" v-for="n in 3" :key="n">列表 {{ n }}</p>
+    <el-card>
+      <template #header>
+        普通渲染
+      </template>
+      <p>{{ text }}</p>
+      <p>{{ data.text }}</p>
+      <p ref="refEl">{{ str }}</p>
+    </el-card>
 
+    <el-card>
+      <template #header>
+        列表渲染
+      </template>
+      <p ref="refEls" v-for="n in 3" :key="n">列表 {{ n }}</p>
+    </el-card>
+
+    <el-card>
+      <template #header>
+        变量绑到 css 上
+      </template>
+      <p class="cssbind">我的颜色会变化</p>
+    </el-card>
   </div>
 </template>
 
@@ -23,35 +39,33 @@ import {
   getCurrentInstance
 } from 'vue'
 
-let vm = null
 let refEl = ref(null)
 let refEls = []
 let text = '普通内容'
+let str = ref('响应式原始类型')
 let data = reactive({
-  text: '响应式对象的内容'
+  text: '响应式对象类型'
 })
-setTimeout(() => {
-  data.text = '响应式对象的内容变化了'
-}, 1000)
 
-let str = ref('响应式原始类型内容')
-setTimeout(() => {
-  str.value = '响应式原始类型内容变化了'
+// ref 定义的响应式数据，赋值方式如下
+// str.value = ''
 
-  // nextTick 中，dom 更新完了，可以取 dom 最新状态
-  nextTick(() => {
-    console.log('nextTick 中获取 ref 对象', refEl.value)
-    console.log('列表的 ref 挂载对象', refEls)
-  })
-}, 1000)
+// nextTick 中，dom 已经更新到最新状态
+nextTick(() => {
+  console.log('获取 ref', refEl.value)
+  console.log('获取 refs', refEls)
+})
 
+// 生命周期
 onBeforeMount(() => {
   console.log('onBeforeMount')
 })
 
 onMounted(() => {
-  vm = getCurrentInstance()
-  console.warn('onMounted 获取组件实例，这个方法是调试看数据用的，不要用在生产', vm)
+  console.log('onBeforeMount')
+  
+  // 获取当前组件实例，调试看数据用的，不要用在生产
+  // let vm = getCurrentInstance()
 })
 
 onBeforeUnmount(() => {
@@ -70,19 +84,29 @@ onUpdated(() => {
   console.log('onUpdated')
 })
 
+
 // css bind 变量
-const theme = reactive({
-  color: 'skyblue'
+let theme = reactive({
+  color: 'blue'
 })
+
 setInterval(() => {
-  theme.color = theme.color === 'skyblue' 
+  theme.color = theme.color === 'blue' 
     ? 'unset' 
-    : 'skyblue'
+    : 'blue'
 }, 1000)
 </script>
 
-<style>
+<style lang="scss">
   .api-template-demo {
-    color: v-bind('theme.color');
+    .el-card {
+      + .el-card {
+        margin-top: 10px;
+      }
+    }
+
+    .cssbind {
+      color: v-bind('theme.color');
+    }
   }
 </style>

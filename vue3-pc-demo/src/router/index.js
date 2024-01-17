@@ -12,8 +12,12 @@ let router = createRouter({
       component: () => import('/src/views/api/template.vue')
     },
     {
-      path: '/api/watch',
-      component: () => import('/src/views/api/watch.vue')
+      path: '/api/computed-watch',
+      component: () => import('/src/views/api/computed-watch.vue')
+    },
+    {
+      path: '/api/directive',
+      component: () => import('/src/views/api/directive.vue')
     },
     {
       path: '/api/comp',
@@ -21,21 +25,21 @@ let router = createRouter({
     },
     {
       path: '/api/render',
-      component: () => import('/src/views/api/render.js')
+      component: () => import('/src/views/api/render/render.js')
     },
     {
       path: '/api/routerStore',
-      component: () => import('/src/views/api/routerStore.vue'),
+      component: () => import('/src/views/api/router/routerStore.vue'),
       children: [
         {
           path: 'child',
           name: 'routerStoreChild',
-          component: () => import('/src/views/api/routerStoreChild.vue')
+          component: () => import('/src/views/api/router/routerStoreChild.vue')
         },
         {
           path: 'child2',
           name: 'routerStoreChild2',
-          component: () => import('/src/views/api/routerStoreChild2.vue')
+          component: () => import('/src/views/api/router/routerStoreChild2.vue')
         },
       ]
     },
