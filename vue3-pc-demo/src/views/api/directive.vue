@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 v-blue style="color: #fff;padding: 10px 20px;">
-      指令
+      利用指令背景变颜色
     </h1>
   </div>
 </template>

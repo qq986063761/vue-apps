@@ -59,8 +59,12 @@
           label: '渲染函数'
         },
         {
-          path: '/api/routerStore/child',
-          label: '路由，状态管理'
+          path: '/api/router',
+          label: '路由'
+        },
+        {
+          path: '/api/store',
+          label: '状态管理'
         }
       ] 
     }

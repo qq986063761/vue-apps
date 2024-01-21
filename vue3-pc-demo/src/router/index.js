@@ -28,20 +28,29 @@ let router = createRouter({
       component: () => import('/src/views/api/render/render.js')
     },
     {
-      path: '/api/routerStore',
-      component: () => import('/src/views/api/router/routerStore.vue'),
+      path: '/api/router',
+      component: () => import('/src/views/api/router/router.vue'),
       children: [
         {
-          path: 'child',
-          name: 'routerStoreChild',
-          component: () => import('/src/views/api/router/routerStoreChild.vue')
+          path: '',
+          redirect: '/api/router/child1'
+        },
+        {
+          path: 'child1',
+          name: 'routerChild1',
+          component: () => import('/src/views/api/router/routerChild1.vue')
         },
         {
           path: 'child2',
-          name: 'routerStoreChild2',
-          component: () => import('/src/views/api/router/routerStoreChild2.vue')
+          name: 'routerChild2',
+          component: () => import('/src/views/api/router/routerChild2.vue')
         },
       ]
+    },
+    {
+      path: '/api/store',
+      component: () => import('/src/views/api/store/store.vue'),
+      name: 'store'
     },
   ]
 })

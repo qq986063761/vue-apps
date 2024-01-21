@@ -18,9 +18,9 @@
 
     <el-card>
       <template #header>
-        变量绑到 css 上
+        css绑定
       </template>
-      <p class="cssbind">我的颜色会变化</p>
+      <p class="cssbind">我的颜色会随变量改变而变化</p>
     </el-card>
   </div>
 </template>

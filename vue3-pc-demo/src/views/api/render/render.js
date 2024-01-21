@@ -25,32 +25,39 @@ export default {
     return () => h('div', [
       h('p', h(ElButton, {
         // 这里可以放任何属性
+        class: 'btn-confirm',
         type: 'primary',
-        // 事件直接在 on 后接驼峰名就行，修饰符直接继续接后面
-        // 像 onClickCapture onKeyupOnce onMouseoverOnceCapture
-        // withModifiers 可以带修饰符
+        // 事件方法 on + 驼峰命名，修饰可以像下面
+        // onClickCapture onKeyupOnce onMouseoverOnceCapture 一样驼峰写后面
+        // 也可以用 withModifiers 带修饰
         onClick: withModifiers(event => {
           console.log('onClick', event)
         }, ['stop'])
       }, () => '点击触发 onClick')),
       // 带指令
       withDirectives(
-        h('p', 'v-model 双向绑定值：' + text.value),
+        h('p', {
+          style: {
+            padding: '10px'
+          }
+        }, 'v-model 双向绑定：' + text.value),
         [
           // <div v-blue:top.animate="200"></div>
           // [指令对象, 值, 参数, 修饰符]
           [blueDirective]
         ]
       ),
+      // 组件
       h(Chlid, {
-        class: 'block',
-        // 传递 v-model 属性
+        // 传递 v-model
         modelValue: text.value,
-        'onUpdate:modelValue': val => text.value = val
+        'onUpdate:modelValue': val => text.value = val,
       }, {
         // 传递 slot
-        header: props => h('p', '传递 header slot 内容到子组件'),
-        default: () => h('p', '传递默认 slot 内容到子组件')
+        header: props => h('p', 'header slot'),
+        default: () => [
+          h('p', '默认 slot')
+        ]
       })
     ])
   }
