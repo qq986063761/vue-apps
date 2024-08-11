@@ -11,9 +11,14 @@ export default defineNuxtConfig({
   $development: {
     
   },
+  modules: [
+    // element-ui
+    '@element-plus/nuxt'
+  ],
   // 开发服务
   devServer: {
     port: 3000,
     host: '0.0.0.0', // 让别人能访问我
-  }
+  },
+  elementPlus: { /** Options */ }
 })

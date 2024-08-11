@@ -8,12 +8,10 @@
 // 默认跳其他页面
 navigateTo({
   name: 'frame',
-  query: {
-    a: 1
-  },
-  params: {
-    text: 'asfasf'
-  }
+  query: {},
+  // params: {
+  //   text: 'asfasf'
+  // }
 })
 </script>
 
