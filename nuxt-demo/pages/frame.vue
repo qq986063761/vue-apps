@@ -1,49 +1,30 @@
 <template>
   <div class="frame">
-    <div v-for="({ label, text }) in timings" :key="label">
-      {{ label }}: {{ text }}
+    <menus></menus>
+    <div class="frame-main">
+      <!-- 路由匹配 -->
+      <NuxtPage class="frame-main-page" :page-key="route => route.frame" />
     </div>
-
-    <el-button type="primary">Primary</el-button>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
 
-let timings = ref([])
-console.log('performance', performance)
-
-onMounted(() => {
-  let { timing } = performance
-  let timingLabelMap = {
-    domContentLoadedEventStart: '文档内容加载开始',
-    domContentLoadedEventEnd: '文档内容加载结束',
-    domComplete: '文档内容完全加载完成',
-    loadEventStart: '页面完全加载的开始',
-    loadEventEnd: '页面完全加载的结束',
-  }
-  
-  for (let prop in timing) {
-    let val = timing[prop]
-    if (typeof val !== 'number') continue
-
-    let date = new Date(val)
-
-    timings.value.push({
-      prop,
-      value: val,
-      label: timingLabelMap[prop] || prop,
-      text: date.toLocaleDateString() + ' ' + date.toLocaleTimeString()
-    })
-  }
-
-  timings.value = timings.value.sort((a, b) => a.value - b.value)
-})
 </script>
 
 <style lang="scss">
 .frame {
+  display: flex;
+  height: 100%;
+}
+
+.frame-main {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+
+.frame-main-page {
   height: 100%;
 }
 </style>

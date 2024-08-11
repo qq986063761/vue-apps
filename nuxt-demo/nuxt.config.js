@@ -5,20 +5,27 @@ export default defineNuxtConfig({
   devtools: { 
     enabled: false 
   }, 
-  $production: {
-    
-  },
-  $development: {
-    
-  },
   modules: [
     // element-ui
     '@element-plus/nuxt'
+  ],
+  plugins: [
+    '~/plugins/element-plus',
   ],
   // 开发服务
   devServer: {
     port: 3000,
     host: '0.0.0.0', // 让别人能访问我
   },
-  elementPlus: { /** Options */ }
+  elementPlus: {  
+
+  },
+  // 生产环境
+  $production: {
+    
+  },
+  // 开发环境
+  $development: {
+    
+  },
 })
