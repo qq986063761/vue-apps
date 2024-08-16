@@ -16,7 +16,7 @@ export default defineConfig({
     }
   },
   // 访问根路径
-  base: '/web/',
+  base: './', // /web/
   build: {
     // 文件输出的根路径
     outDir: 'dist/web',
@@ -26,10 +26,10 @@ export default defineConfig({
         manualChunks: {
           vue: ['vue', 'vue-router'],
           element: ['element-plus'],
-          'routerStore': [
-            './src/views/api/routerStore.vue',
-            './src/views/api/routerStoreChild.vue',
-            './src/views/api/routerStoreChild2.vue'
+          'router': [
+            './src/views/api/router/router.vue',
+            './src/views/api/router/routerChild1.vue',
+            './src/views/api/router/routerChild2.vue'
           ],
         }
       }
