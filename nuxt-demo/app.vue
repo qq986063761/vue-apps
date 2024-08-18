@@ -32,7 +32,7 @@ onMounted(() => {
   window.addEventListener('error', function (error) {
     console.log('window-event-listener-error', error)
   }, true)
-
+ 
   // 捕获一些漏掉的 promise 异常，可通过 Promise.reject('promise error') 测试
   window.addEventListener("unhandledrejection", function (event) {
     event.preventDefault()

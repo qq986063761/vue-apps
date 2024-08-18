@@ -7,11 +7,7 @@
 <script setup>
 // 默认跳其他页面
 navigateTo({
-  name: 'frame',
-  query: {},
-  // params: {
-  //   text: 'asfasf'
-  // }
+  path: '/frame/performance'
 })
 </script>
 

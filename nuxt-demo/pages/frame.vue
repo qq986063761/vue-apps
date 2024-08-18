@@ -1,6 +1,6 @@
 <template>
   <div class="frame">
-    <menus></menus>
+    <menus :data="menuData"></menus>
     <div class="frame-main">
       <!-- 路由匹配 -->
       <NuxtPage class="frame-main-page" :page-key="route => route.frame" />
@@ -9,7 +9,12 @@
 </template>
 
 <script setup>
-
+let menuData = [
+  {
+    label: '性能监控',
+    value: 'performance'
+  }
+]
 </script>
 
 <style lang="scss">
@@ -26,5 +31,6 @@
 
 .frame-main-page {
   height: 100%;
+  padding: 12px 16px;
 }
 </style>
