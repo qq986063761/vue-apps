@@ -32,5 +32,6 @@ let menuData = [
 .frame-main-page {
   height: 100%;
   padding: 12px 16px;
+  overflow: auto;
 }
 </style>

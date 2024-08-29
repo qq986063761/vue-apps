@@ -7,7 +7,8 @@ export default defineNuxtConfig({
   }, 
   modules: [
     // element-ui
-    '@element-plus/nuxt'
+    '@element-plus/nuxt',
+    '@pinia/nuxt' // npm i pinia @pinia/nuxt
   ],
   plugins: [
     '~/plugins/element-plus',
