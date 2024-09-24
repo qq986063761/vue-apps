@@ -18,7 +18,7 @@ onMounted(() => {
 	 * @param {String} source 出错文件
 	 * @param {Number} lineno 行号
 	 * @param {Number} colno 列号
-	 * @param {Object} error Error对象（对象）
+	 * @param {Object} error Error对象（对象）它的 stack 字段就是堆栈错误日志
 	 */
 	window.onerror = function(message, source, lineno, colno, error) {
 		console.log('onerror', { message, source, lineno, colno, error })
@@ -36,12 +36,14 @@ onMounted(() => {
 		'error',
 		function(event) {
 			console.log('addEventListener error', event)
-
-      errStore.add({ 
-        message: '资源加载错误',
-        nodeName: event.target.nodeName, 
-        src: event.target.src || event.target.href
-      })
+			
+			if (event.target.nodeName) {
+				errStore.add({ 
+					message: '资源加载错误',
+					nodeName: event.target.nodeName, 
+					src: event.target.src || event.target.href
+				})
+			}
 		},
 		true
 	)
@@ -67,8 +69,8 @@ onMounted(() => {
 		// }, 1000)
 	})
 
+	// 正常退出
 	window.addEventListener('beforeunload', function() {
-		// 正常退出
 		sessionStorage.setItem('good_exit', 'true')
 	})
 
