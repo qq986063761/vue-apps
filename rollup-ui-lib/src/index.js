@@ -1,5 +1,4 @@
 import './css/base.scss'
-import './css/mixin.scss'
 import Button from './components/button/index.js'
 import Table from './components/table/index.js'
 

@@ -13,9 +13,11 @@ module.exports = {
   plugins: [
     resolve(),
     commonjs(),
-    vuePlugin(),
     scss({
-      fileName: 'my-ui.css'
-    })
+      fileName: 'my-ui.css',
+      // 添加全局 SCSS 变量和 mixin
+      prependData: `@import "/src/css/mixin.scss";`
+    }),
+    vuePlugin(),
   ]
 }
