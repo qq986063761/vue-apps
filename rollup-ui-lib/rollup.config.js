@@ -1,6 +1,7 @@
 const resolve = require('@rollup/plugin-node-resolve')
 const commonjs = require('@rollup/plugin-commonjs')
 const vuePlugin = require('rollup-plugin-vue')
+const scss = require('rollup-plugin-scss')
 
 module.exports = {
   input: 'src/index.js',
@@ -12,6 +13,9 @@ module.exports = {
   plugins: [
     resolve(),
     commonjs(),
-    vuePlugin()
+    vuePlugin(),
+    scss({
+      fileName: 'my-ui.css'
+    })
   ]
 }

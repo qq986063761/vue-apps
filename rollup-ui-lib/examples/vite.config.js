@@ -6,9 +6,6 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 export default defineConfig({
   plugins: [
     vue2(),
-    // legacy({
-    //   targets: ['defaults', 'not IE 11']
-    // }),
     createHtmlPlugin({
       minify: true,
       inject: {
@@ -32,7 +29,7 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: { 
-        main: path.resolve(__dirname, 'index.html') // path.resolve(__dirname, 'main.js')
+        main: path.resolve(__dirname, 'index.html')
       },
       output: {
         entryFileNames: 'assets/[name].[hash].js',

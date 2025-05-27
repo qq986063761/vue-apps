@@ -1,7 +1,11 @@
-import Button from './components/button/button.vue'
+import './css/base.scss'
+import './css/mixin.scss'
+import Button from './components/button/index.js'
+import Table from './components/table/index.js'
 
 const components = [
-  Button
+  Button,
+  Table
 ]
 
 export default {
@@ -13,5 +17,6 @@ export default {
 }
 
 export {
-  Button
+  Button,
+  Table
 }
