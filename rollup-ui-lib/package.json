@@ -1,0 +1,26 @@
+{
+  "name": "my-ui",
+  "version": "1.0.0",
+  "description": "A Vue2 UI component library built with Rollup",
+  "main": "dist/my-ui.umd.js",
+  "module": "dist/my-ui.esm.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w"
+  },
+  "peerDependencies": {
+    "vue": "^2.7.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "rollup": "^4.41.1",
+    "rollup-plugin-vue": "^5.1.9",
+    "sass": "^1.89.0",
+    "vue": "^2.7.16",
+    "vue-template-compiler": "^2.7.16"
+  }
+}
