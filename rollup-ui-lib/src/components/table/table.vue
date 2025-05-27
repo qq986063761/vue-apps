@@ -11,6 +11,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../css/mixin.scss";
+
 .my-table {
   @include ellipsis;
 }
