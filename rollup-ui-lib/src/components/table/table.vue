@@ -1,6 +1,6 @@
 <template>
   <div class="my-table">
-    
+    测试
   </div>
 </template>
 
@@ -10,10 +10,9 @@ export default {
 }
 </script>
 
+<style src="./table.scss"></style>
 <style lang="scss">
-// @use "../../css/mixin.scss" as *;
-
 .my-table {
-  // @include ellipsis;
+  @include ellipsis;
 }
 </style>
