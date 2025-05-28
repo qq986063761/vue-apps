@@ -11,6 +11,8 @@ export default {
 </script>
 
 <style lang="scss">
+// @use "../../css/theme.scss" as *;
+
 .my-button {
   display: inline-flex;
   height: 32px;
@@ -21,7 +23,7 @@ export default {
   cursor: pointer;
   text-align: center;
   background: #fff;
-  border: 1px solid lightgray;
+  border: 1px solid $border-color;
   border-radius: 4px;
 }
 </style>
