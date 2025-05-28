@@ -4,6 +4,7 @@ const vue = require('rollup-plugin-vue')
 const scss = require('rollup-plugin-scss')
 const path = require('path')
 const postcss = require('rollup-plugin-postcss')
+const url = require('@rollup/plugin-url')
 
 module.exports = {
   input: 'src/index.js',
@@ -15,6 +16,14 @@ module.exports = {
   plugins: [
     resolve(),
     commonjs(),
+    // 静态资源处理
+    url({
+      fileName: '[dirname][name][extname]', // [hash]
+      limit: 0, // 设置为0表示所有文件都保留为原文件
+      publicPath: './dist/', // 写到代码中的根路径
+      // include: ['**/*.png', '**/*.jpg'], // 指定处理的文件类型
+      // emitFiles: true, // 输出文件到目录
+    }),
     // css 文件预处理
     postcss({
       plugins: [

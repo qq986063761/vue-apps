@@ -1,6 +1,8 @@
 <template>
   <div class="my-table">
     测试
+
+    <img src="./empty.png">
   </div>
 </template>
 
