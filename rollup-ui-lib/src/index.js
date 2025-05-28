@@ -1,4 +1,4 @@
-import './css/base.scss'
+import './css/base.css'
 import Button from './components/button/index.js'
 import Table from './components/table/index.js'
 

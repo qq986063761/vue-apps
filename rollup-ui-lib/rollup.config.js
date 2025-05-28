@@ -1,7 +1,7 @@
 const resolve = require('@rollup/plugin-node-resolve')
 const commonjs = require('@rollup/plugin-commonjs')
 const vue = require('rollup-plugin-vue')
-const scss = require('rollup-plugin-scss')
+// const scss = require('rollup-plugin-scss')
 const path = require('path')
 const postcss = require('rollup-plugin-postcss')
 
@@ -15,13 +15,19 @@ module.exports = {
   plugins: [
     resolve(),
     commonjs(),
-    // 浏览器兼容css属性补全
+    // css 预处理
     postcss({
-      plugins: []
+      plugins: [
+        require('autoprefixer'),
+        require('postcss-preset-env')
+      ],
+      // 可选：将 CSS 提取到单独的文件
+      extract: 'my-ui.css'  
     }),
-    scss({
-      fileName: 'my-ui.css'
-    }),
+    // 用了 postcss 就不需要 scss 插件了
+    // scss({
+    //   fileName: 'my-ui.css'
+    // }),
     vue({
       // 单文件注入 css 预处理数据
       data: {
