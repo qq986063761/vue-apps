@@ -17,8 +17,17 @@ export default defineConfig({
     })
   ],
   resolve: {
+    // 别名，用于内部路径解析
     alias: {
-      'my-ui': path.resolve(__dirname, '../src')
+      'my-ui': path.resolve(__dirname, '../src'),
+      '~': path.resolve(__dirname, '../src')  // 添加 ~ 别名
+    }
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "${path.resolve(__dirname, '../src/css/theme.scss')}" as *;@use "${path.resolve(__dirname, '../src/css/mixin.scss')}" as *;`
+      }
     }
   },
   server: {

@@ -62,7 +62,7 @@ module.exports = {
             importer: [
               function (url, prev) {
                 return {
-                  // 定义 scss 根路径，用于解析文件中的导入 scss 的路径
+                  // 定义 scss 根路径，用于解析文件中的导入 scss 的路径别名
                   file: url.replace(/^~/, path.resolve(__dirname, './src'))
                 }
               },
