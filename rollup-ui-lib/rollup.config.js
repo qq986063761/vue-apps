@@ -6,6 +6,7 @@ const path = require('path')
 const postcss = require('rollup-plugin-postcss')
 const url = require('@rollup/plugin-url')
 const terser = require('@rollup/plugin-terser')
+const eslint = require('@rollup/plugin-eslint')
 const { visualizer } = require("rollup-plugin-visualizer")
 
 const isAnalyze = process.argv.includes('--analyze')
@@ -19,27 +20,6 @@ module.exports = {
   },
   plugins: [
     resolve(),
-    commonjs(),
-    // 静态资源处理
-    url({
-      fileName: '[dirname][name][extname]', // [hash]
-      limit: 0, // 设置为0表示所有文件都保留为原文件
-      publicPath: './dist/', // 写到代码中的根路径
-      // include: ['**/*.png', '**/*.jpg'], // 指定处理的文件类型
-      // emitFiles: true, // 输出文件到目录
-    }),
-    // css 文件预处理
-    postcss({
-      plugins: [
-        require('autoprefixer'),
-        require('postcss-preset-env')
-      ],
-      extensions: ['.css', '.scss'],
-      // 压缩
-      minimize: true,
-      // 可选：将 CSS 提取到单独的文件
-      extract: 'my-ui.css'
-    }),
     // 用了 postcss 插件，就不需要 scss 插件了
     // scss({
     //   fileName: 'my-ui.css'
@@ -71,8 +51,39 @@ module.exports = {
         },
       },
     }),
+    commonjs(),
+    // 静态资源处理
+    url({
+      fileName: '[dirname][name][extname]', // [hash]
+      limit: 0, // 设置为0表示所有文件都保留为原文件
+      publicPath: './dist/', // 写到代码中的根路径
+      // include: ['**/*.png', '**/*.jpg'], // 指定处理的文件类型
+      // emitFiles: true, // 输出文件到目录
+    }),
+    // css 文件预处理
+    postcss({
+      plugins: [
+        require('autoprefixer'),
+        require('postcss-preset-env')
+      ],
+      extensions: ['.css', '.scss'],
+      // 压缩
+      minimize: true,
+      // 可选：将 CSS 提取到单独的文件
+      extract: 'my-ui.css'
+    }),
+    eslint({
+      include: [
+        // 'src/**/*.js', 
+        'src/**/*.vue',
+        // 'src/**/*.vue?*', // 匹配带查询参数的路径
+        // 'src/**/*.vue?common'  // 兼容其他可能的查询参数
+      ],
+      exclude: ['node_modules/**'],
+      throwOnError: true // 发现错误时终止打包[3,4](@ref)
+    }),
     // 压缩
-    terser(),
+    process.env.NODE_ENV === 'production' && terser(),
     // 分析打包结果
     isAnalyze && visualizer()
   ]

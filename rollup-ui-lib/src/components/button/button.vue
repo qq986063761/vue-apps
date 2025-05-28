@@ -7,6 +7,12 @@
 <script>
 export default {
   name: 'MyButton',
+  mounted() {
+    // const a = '1'
+    // const b = "2"
+    // console.log(a + b)
+    // console.log("button mounted")
+  }
 }
 </script>
 
