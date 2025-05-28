@@ -6,6 +6,9 @@ const path = require('path')
 const postcss = require('rollup-plugin-postcss')
 const url = require('@rollup/plugin-url')
 const terser = require('@rollup/plugin-terser')
+const { visualizer } = require("rollup-plugin-visualizer")
+
+const isAnalyze = process.argv.includes('--analyze')
 
 module.exports = {
   input: 'src/index.js',
@@ -69,6 +72,8 @@ module.exports = {
       },
     }),
     // 压缩
-    terser()
+    terser(),
+    // 分析打包结果
+    isAnalyze && visualizer()
   ]
 }
