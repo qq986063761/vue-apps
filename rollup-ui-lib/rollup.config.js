@@ -16,7 +16,10 @@ module.exports = {
     scss({
       fileName: 'my-ui.css',
       // 添加全局 SCSS 变量和 mixin
-      prefix: `@import "./src/css/mixin.scss";`
+      // @use "/src/css/mixin.scss" as *;
+      // @import "/src/css/mixin.scss";
+      // prefix: `@import "/src/css/mixin.scss";`, 
+      // includePaths: ['src']
     }),
     vuePlugin(),
   ]
