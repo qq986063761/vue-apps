@@ -5,6 +5,7 @@ const scss = require('rollup-plugin-scss')
 const path = require('path')
 const postcss = require('rollup-plugin-postcss')
 const url = require('@rollup/plugin-url')
+const terser = require('@rollup/plugin-terser')
 
 module.exports = {
   input: 'src/index.js',
@@ -67,5 +68,7 @@ module.exports = {
         },
       },
     }),
+    // 压缩
+    terser()
   ]
 }
