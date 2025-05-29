@@ -1,10 +1,24 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue2'
 import { resolve } from 'path'
+import { visualizer } from 'rollup-plugin-visualizer'
+import eslint from 'vite-plugin-eslint'
+
+const isAnalyze = process.env.VITE_ANALYZE === 'true'
 
 export default defineConfig({
   plugins: [
-    vue()
+    vue(),
+    eslint({
+      exclude: ['node_modules/**', 'dist/**'],
+      cache: false,
+      // fix: true  // 添加这行来自动修复
+    }),
+    isAnalyze && visualizer({
+      // open: true,      // 构建完成后自动打开分析页面
+      gzipSize: true,  // 显示 gzip 压缩后的体积
+      brotliSize: true // 显示 brotli 压缩后的体积
+    })
   ], 
   resolve: {
     alias: {

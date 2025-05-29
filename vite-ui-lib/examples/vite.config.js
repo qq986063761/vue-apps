@@ -3,6 +3,7 @@ import vue2 from '@vitejs/plugin-vue2'
 import path from 'path'
 import { createHtmlPlugin } from 'vite-plugin-html'
 import config from '../vite.config'
+import eslint from 'vite-plugin-eslint'
 
 // console.log('NODE_ENV', process.env.NODE_ENV) // production
 
@@ -10,6 +11,11 @@ export default defineConfig({
   base: './',
   plugins: [
     vue2(),
+    eslint({
+      exclude: ['node_modules/**', 'dist/**'],
+      cache: false,
+      // fix: true  // 添加这行来自动修复
+    }),
     createHtmlPlugin({
       minify: true,
       inject: {
