@@ -20,9 +20,6 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
     },
     // 解决 Vue2 相关问题
-    // setupFiles: './test/setup.js',
-    deps: {
-      inline: ['vue2']
-    }
+    // setupFiles: './test/setup.js'
   }
 })
