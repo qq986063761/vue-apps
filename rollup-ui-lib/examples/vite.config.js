@@ -5,6 +5,7 @@ import { createHtmlPlugin } from 'vite-plugin-html'
 import eslint from 'vite-plugin-eslint'
 
 export default defineConfig({
+  base: './',
   plugins: [
     vue2(),
     eslint({
