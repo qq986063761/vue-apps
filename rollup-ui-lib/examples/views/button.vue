@@ -6,7 +6,13 @@
 
 <script>
 export default {
-
+  mounted() {
+    // 测试 eslint 规则
+    // const a = '1'
+    // const b = "2"
+    // // console.log(a + b)
+    // console.log("button mounted")
+  }
 }
 </script>
 

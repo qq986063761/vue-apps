@@ -2,10 +2,11 @@
 - node 版本 v20.16.0
 
 # 脚本
-- "dev": "rollup -c -w", 监控文件改动，实时打包
-- "dev:examples": "vite examples", 开发demo演示
-- "build": "rollup -c --verbose", 直接打包配置文件
-- "build:examples": "vite build examples" 打包demo项目
+"dev:examples": "vite examples", 开发demo
+"watch": "rollup -c -w", 实时监听并 build
+"build": "NODE_ENV=production rollup -c", 打包库
+"analyze": "NODE_ENV=production rollup -c --analyze", 分析包
+"build:examples": "vite build examples" 打包demo
 
 
 

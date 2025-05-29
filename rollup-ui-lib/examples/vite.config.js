@@ -2,10 +2,28 @@ import { defineConfig } from 'vite'
 import vue2 from '@vitejs/plugin-vue2'
 import path from 'path'
 import { createHtmlPlugin } from 'vite-plugin-html'
+import eslint from 'vite-plugin-eslint'
 
 export default defineConfig({
   plugins: [
     vue2(),
+    eslint({
+      // include: [
+      //   // 'examples/*.vue',
+      //   // 'examples/*.js',
+      //   // 'examples/*.jsx', 
+      //   'examples/**/*.vue', 
+      //   'examples/**/*.js', 
+      //   'examples/**/*.jsx', 
+      //   // 'src/**/*.ts', 
+      //   // 'src/**/*.tsx'
+      // ],
+      exclude: ['node_modules/**', 'dist/**'],
+      cache: false,
+      // 指定配置文件
+      // overrideConfigFile: path.resolve(__dirname, '../eslint.config.js'),
+      // fix: true  // 添加这行来自动修复
+    }),
     createHtmlPlugin({
       minify: true,
       inject: {

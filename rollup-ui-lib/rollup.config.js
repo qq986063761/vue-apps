@@ -80,7 +80,9 @@ module.exports = {
         // 'src/**/*.vue?common'  // 兼容其他可能的查询参数
       ],
       exclude: ['node_modules/**'],
-      throwOnError: true // 发现错误时终止打包[3,4](@ref)
+      // 指定配置文件
+      // overrideConfigFile: path.resolve(__dirname, './eslint.config.js'),
+      throwOnError: true // 发现错误时终止打包
     }),
     // 压缩
     process.env.NODE_ENV === 'production' && terser(),

@@ -8,6 +8,7 @@
 export default {
   name: 'MyButton',
   mounted() {
+    // 测试 eslint 规则
     // const a = '1'
     // const b = "2"
     // console.log(a + b)

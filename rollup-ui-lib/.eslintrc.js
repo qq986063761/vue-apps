@@ -1,3 +1,4 @@
+// rollup 用
 module.exports = {
   parser: 'vue-eslint-parser', // 或 'babel-eslint'（需安装）
   parserOptions: {
