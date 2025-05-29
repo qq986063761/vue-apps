@@ -1,12 +1,20 @@
 <template>
-  <button class="my-button">
-    <slot></slot>
+  <button class="my-button" @click="onClick">
+    <slot>{{ text }}</slot>
   </button>
 </template>
 
 <script>
 export default {
   name: 'MyButton',
+  props: {
+    text: String
+  },
+  methods: {
+    onClick() {
+      this.$emit('click')
+    }
+  },
   mounted() {
     // 测试 eslint 规则
     // const a = '1'
