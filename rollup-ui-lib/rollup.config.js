@@ -88,5 +88,7 @@ module.exports = {
     process.env.NODE_ENV === 'production' && terser(),
     // 分析打包结果
     isAnalyze && visualizer()
-  ]
+  ],
+  // 排除依赖，避免重复打包
+  external: ['vue']
 }
