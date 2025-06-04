@@ -22,7 +22,8 @@
           :class="{'is-open': isShowAll}"
           type="text" 
           after-icon="icon-dropdown"
-          v-if="oversize && showMore" 
+          :hover-bg="false"
+          v-if="oversize && showMore || isShowAll && expandRows" 
           @click="clickMore">
           {{showMore ? (isShowAll ? $t('okr.putAway') : $t('okr.seeMore')) : '...'}}
         </el-button>
@@ -128,9 +129,12 @@
       titleDir() {
         if (this.titleDirective) return this.titleDirective // 外部传入指令
         if (this.hideTitle) return ''
+
+        // 显示更多后，如果展开后还想限制行数，则需要显示 title
+        const isNeedTitle = this.isShowAll && this.expandRows && this.oversize
         
         // 如果已经显示了更多，或者没溢出，则不用 hover 显示 title
-        return (this.showMore || !this.oversize)
+        return (this.showMore && !isNeedTitle || !this.oversize)
           ? null
           : {
             txt: this.content,
@@ -184,6 +188,7 @@
             this.init()
           }
         } else {
+          this.oversize = true // 如果是收起的，表示之前肯定溢出了
           text.innerHTML = this.prevContent
         }
 
