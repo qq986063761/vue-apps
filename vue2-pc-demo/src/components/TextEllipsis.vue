@@ -171,13 +171,16 @@
         }
       },
       clickMore(val) {
-        // 没配置则不继续
-        if (!this.showMore) return
-
-        const isBool = typeof val === 'boolean'
-
         let { text } = this.$refs
-        this.isShowAll = isBool ? val : !this.isShowAll
+
+        const isBool = typeof val === 'boolean' // 外部传入的值
+        const nextVal = isBool ? val : !this.isShowAll // 下一个展开状态
+
+        if (!this.showMore || // 没配置需要展开收起则不继续
+          nextVal && !this.oversize || // 没溢出但是需要展开，也不继续避免问题
+          !nextVal && !this.prevContent) return // 如果需要收起，但是之前没点过展开，也不继续
+
+        this.isShowAll = nextVal
 
         if (this.isShowAll) {
           this.prevContent = text.innerHTML
@@ -187,8 +190,10 @@
           if (this.expandRows) {
             this.init()
           }
-        } else {
-          this.oversize = true // 如果是收起的，表示之前肯定溢出了
+        } else if (this.prevContent) {
+          // 如果是收起的，表示之前肯定溢出了恢复一下，避免配置了 expandRow 后，如果展开后没溢出
+          // 则收起后 oversize 是 false 了，也不会溢出了
+          this.oversize = true 
           text.innerHTML = this.prevContent
         }
 
@@ -260,7 +265,7 @@
 
           // 如果还有更多按钮，则再减少几个字让更多按钮能放下
           if (this.$refs.moreBtn) {
-            let num = Math.ceil(this.$refs.moreBtn.$el.offsetWidth / 14)
+            let num = Math.ceil(this.$refs.moreBtn.$el.offsetWidth / 14) + 3
             this.computedText = this.computedText.slice(0, this.computedText.length - num)
           }
 
