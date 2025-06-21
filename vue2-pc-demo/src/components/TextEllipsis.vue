@@ -108,10 +108,8 @@
         }
       },
       contentHtml() {
-        if(!this.content) return ''
-        // 日志
-        // if (this.content.includes('约客户到公司')) console.log('contentHtml', this.content)
-
+        if (!this.content) return ''
+        
         let content = this.content.replace(/&nbsp;/g, '')
         // 将 div 包裹的内容替换为 br 作为换行，无缘无故前面多了很多 <br>
         content = content.replace(new RegExp('<div>+|<div sel-id="([^"]+)">+|<\/div>+', 'g'), '<br>')
@@ -121,7 +119,6 @@
       },
       // 内容是否是 html 格式的内容
       isHtml() {
-        // console.log('isHtml', this.contentHtml, this.isHtmlFormat)
         if (typeof this.isHtmlFormat === 'boolean') return this.isHtmlFormat
         return this.contentHtml.includes('</') && this.contentHtml.includes('<')
       },
@@ -148,7 +145,6 @@
       disabled: 'init',
       contentHtml: 'init',
       computedReady(val) {
-        // console.log('computedReady', this.computedReady)
         this.$emit('computed-ready', val)
       }
     },
@@ -161,8 +157,6 @@
         this.$emit('pad-click', event)
       },
       onClick(event) {
-        // console.log('onClick', event, event.target.nodeName, event.target.href)
-
         // a 链接手动触发事件
         if (event.target.nodeName === 'A' && event.target.href) {
           event.preventDefault()
@@ -206,7 +200,6 @@
         this.oversize = false
         this.computedReady = false
         
-        // console.log('computeText', this.printing)
         // 打印模式恢复后不用继续了
         if (this.printing) return
 
@@ -241,15 +234,8 @@
                 $text.innerHTML = text = text.substring(0, text.length - 1)
               }
 
-              // if (this.contentHtml.includes(this.testText)) {
-              //   console.log('n', $el, $el.offsetWidth, $el.offsetHeight, n)
-              // }
               n--
             }
-
-            // if (this.contentHtml.includes(this.testText)) {
-            //   console.log('end', $el, $el.offsetHeight, $el.offsetWidth, text)
-            // }
           }
 
           this.computedText = text
@@ -258,6 +244,9 @@
       },
       limitShow() {
         this.computedReady = true
+
+        // 如果没有溢出，就不用后面的逻辑了，因为不用再减少文字用来给更多按钮显示位置
+        if (!this.oversize) return
 
         this.$nextTick(() => {
           let $text = this.$refs.text
@@ -284,25 +273,16 @@
       this._init = debounce(() => {
         if (this.disabled) return
 
-        // if (this.content.includes(this.testText)) {
-        //   console.log('_init', this.$refs.el)
-        // }
         this.computeText()
       }, 150)
 
       this.oldWidth = this.$refs.el && this.$refs.el.offsetWidth
-      // if (this.content.includes(this.testText)) {
-      //   console.log('oldWidth', this.$refs.el, this.oldWidth)
-      // }
-      
+     
       this.onResize = debounce(() => {
         // 避免高度变化也触发导致一直闪动，这里只有宽度变化才重新 init
         if (this.$refs.el && this.$refs.el.offsetWidth === this.oldWidth) return
         this.oldWidth = this.$refs.el && this.$refs.el.offsetWidth
 
-        // if (this.content.includes(this.testText)) {
-        //   console.log('resize', this.$refs.el, this.$refs.el.offsetWidth)
-        // }
         this.init()
       }, 150)
       addResizeListener(this.$refs.el, this.onResize)
