@@ -6,7 +6,8 @@ import {
   Setting,
   User,
   Document,
-  MagicStick
+  MagicStick,
+  Shop
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -31,6 +32,11 @@ const menuItems = [
     index: '/builtin-components',
     title: '内置组件演示',
     icon: MagicStick
+  },
+  {
+    index: '/store-demo',
+    title: 'Store 演示',
+    icon: Shop
   }
 ]
 
