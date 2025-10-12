@@ -9,9 +9,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
-
-// 定义 props
+// 定义 props - defineProps 和 defineEmits 是编译器宏，无需导入
 const props = defineProps({
   message: {
     type: String,

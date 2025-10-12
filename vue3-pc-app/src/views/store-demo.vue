@@ -87,7 +87,7 @@
     <el-card class="combined-card" shadow="hover">
       <template #header>
         <div class="card-header">
-          <span>组合数据 (解决循环引用)</span>
+          <span>组合数据 (自动更新)</span>
         </div>
       </template>
       <div class="combined-content">
@@ -96,7 +96,6 @@
           <pre>{{ JSON.stringify(combinedData, null, 2) }}</pre>
         </div>
         <div class="actions">
-          <el-button @click="refreshCombinedData()" type="primary">刷新组合数据</el-button>
           <el-button @click="composer.syncAllStores()" type="success">同步所有 Store</el-button>
           <el-button @click="composer.resetAllStores()" type="warning">重置所有 Store</el-button>
         </div>
@@ -145,7 +144,7 @@ export function useStoreComposer() {
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useBaseStore } from '../stores/base'
 import { useChild1Store } from '../stores/child1'
 import { useChild2Store } from '../stores/child2'
@@ -162,14 +161,18 @@ const composer = useStoreComposer()
 // 组合数据
 const combinedData = ref({})
 
-// 刷新组合数据
-function refreshCombinedData() {
+// 使用 watchEffect 自动监听 store 变化并更新组合数据
+watchEffect(() => {
+  // 访问各个 store 的响应式数据，触发依赖收集
+  baseStore.baseData
+  baseStore.baseCount
+  child1Store.child1Data
+  child1Store.child1Count
+  child2Store.child2Data
+  child2Store.child2Count
+  
+  // 自动更新组合数据
   combinedData.value = composer.getCombinedData()
-}
-
-// 组件挂载时初始化
-onMounted(() => {
-  refreshCombinedData()
 })
 </script>
 

@@ -8,9 +8,7 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue'
-
-// 定义 emits
+// 定义 emits - defineEmits 是编译器宏，无需导入
 const emit = defineEmits(['custom-event'])
 
 // 发送简单事件
