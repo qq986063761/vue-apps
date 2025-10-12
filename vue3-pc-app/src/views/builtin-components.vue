@@ -112,7 +112,7 @@
         <div v-if="showAsync" class="async-container">
           <Suspense>
             <template #default>
-              <AsyncComponent />
+              <AsyncComponentWrapper />
             </template>
             <template #fallback>
               <div class="loading">正在加载异步组件...</div>
@@ -145,6 +145,7 @@ import { ref, defineAsyncComponent } from 'vue'
 import TabA from '@/components/TabA.vue'
 import TabB from '@/components/TabB.vue'
 import TabC from '@/components/TabC.vue'
+import AsyncComponent from '@/components/AsyncComponent.vue'
 
 // ========== Transition 演示 ==========
 const showBasic = ref(false)
@@ -195,22 +196,10 @@ const showNotification = ref(false)
 const showAsync = ref(false)
 
 // 异步组件
-const AsyncComponent = defineAsyncComponent(() => {
+const AsyncComponentWrapper = defineAsyncComponent(() => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({
-        template: `
-          <div class="async-component">
-            <h4>异步组件已加载</h4>
-            <p>这个组件是异步加载的，使用了 2 秒的延迟</p>
-            <p>当前时间: {{ currentTime }}</p>
-          </div>
-        `,
-        setup() {
-          const currentTime = ref(new Date().toLocaleString())
-          return { currentTime }
-        }
-      })
+      resolve(AsyncComponent)
     }, 2000)
   })
 })
@@ -266,11 +255,11 @@ const components = {
   background-color: white;
   border-radius: 6px;
   border-left: 4px solid #409eff;
-}
 
-.demo-item h3 {
-  color: #2c3e50;
-  margin-top: 0;
+  h3 {
+    color: #2c3e50;
+    margin-top: 0;
+  }
 }
 
 /* Transition 样式 */
@@ -282,15 +271,18 @@ const components = {
   margin: 10px 0;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity 0.5s;
 }
 
-.fade-enter-from, .fade-leave-to {
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 
-.slide-enter-active, .slide-leave-active {
+.slide-enter-active,
+.slide-leave-active {
   transition: all 0.5s;
 }
 
@@ -317,11 +309,13 @@ const components = {
   cursor: pointer;
 }
 
-.list-enter-active, .list-leave-active {
+.list-enter-active,
+.list-leave-active {
   transition: all 0.5s;
 }
 
-.list-enter-from, .list-leave-to {
+.list-enter-from,
+.list-leave-to {
   opacity: 0;
   transform: translateY(30px);
 }
@@ -340,23 +334,31 @@ const components = {
 .tab-buttons {
   display: flex;
   background-color: #f5f5f5;
-}
 
-.tab-buttons button {
-  padding: 10px 20px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  border-right: 1px solid #ddd;
-}
+  button {
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-right: 1px solid #ddd;
+    color: #666;
+    font-size: 14px;
+    transition: all 0.3s ease;
 
-.tab-buttons button:last-child {
-  border-right: none;
-}
+    &:hover {
+      background-color: #e8f4fd;
+      color: #409eff;
+    }
 
-.tab-buttons button.active {
-  background-color: #409eff;
-  color: white;
+    &:last-child {
+      border-right: none;
+    }
+
+    &.active {
+      background-color: #409eff;
+      color: white;
+    }
+  }
 }
 
 .tab-content {
@@ -401,11 +403,13 @@ const components = {
   z-index: 1001;
 }
 
-.notification-enter-active, .notification-leave-active {
+.notification-enter-active,
+.notification-leave-active {
   transition: all 0.3s;
 }
 
-.notification-enter-from, .notification-leave-to {
+.notification-enter-from,
+.notification-leave-to {
   opacity: 0;
   transform: translateX(100%);
 }
@@ -442,10 +446,10 @@ button {
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-}
 
-button:hover {
-  background-color: #337ecc;
+  &:hover {
+    background-color: #337ecc;
+  }
 }
 
 .list-controls button {

@@ -22,30 +22,30 @@ export default {
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: #f9f9f9;
-}
 
-.tab-content-item h4 {
-  margin-top: 0;
-  color: #333;
-}
+  h4 {
+    margin-top: 0;
+    color: #333;
+  }
 
-.tab-content-item p {
-  color: #666;
-  margin-bottom: 15px;
-}
+  p {
+    color: #666;
+    margin-bottom: 15px;
+  }
 
-.tab-content-item select {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-  background-color: white;
-}
+  select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
 
-.tab-content-item select:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    }
+  }
 }
 </style>

@@ -156,31 +156,31 @@ onUnmounted(() => {
   background-color: white;
   border-radius: 6px;
   border-left: 4px solid #409eff;
-}
 
-.demo-item h3 {
-  color: #2c3e50;
-  margin-top: 0;
-}
+  h3 {
+    color: #2c3e50;
+    margin-top: 0;
+  }
 
-.demo-item p {
-  margin: 10px 0;
-  font-size: 16px;
-}
+  p {
+    margin: 10px 0;
+    font-size: 16px;
+  }
 
-.demo-item button {
-  margin: 5px;
-  padding: 8px 16px;
-  background-color: #409eff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
+  button {
+    margin: 5px;
+    padding: 8px 16px;
+    background-color: #409eff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
 
-.demo-item button:hover {
-  background-color: #337ecc;
+    &:hover {
+      background-color: #337ecc;
+    }
+  }
 }
 
 h2 {
