@@ -2,7 +2,6 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { 
-  Menu as IconMenu, 
   DataAnalysis,
   Setting,
   User,
@@ -51,85 +50,50 @@ const toggleCollapse = () => {
 </script>
 
 <template>
-  <div class="app-container">
-    <!-- 左侧菜单 -->
-    <el-container>
-      <el-aside :width="isCollapse ? '64px' : '200px'" class="sidebar">
-        <div class="logo">
-          <h3 v-if="!isCollapse">Vue3 PC App</h3>
-          <h3 v-else>V3</h3>
-        </div>
-        
-        <el-menu
-          :default-active="route.path"
-          :collapse="isCollapse"
-          :unique-opened="true"
-          class="sidebar-menu"
-          @select="handleMenuClick"
-        >
-          <el-menu-item 
-            v-for="item in menuItems" 
-            :key="item.index"
-            :index="item.index"
-          >
-            <el-icon><component :is="item.icon" /></el-icon>
-            <template #title>{{ item.title }}</template>
-          </el-menu-item>
-        </el-menu>
-      </el-aside>
+  <!-- 左侧菜单 -->
+  <el-aside :width="isCollapse ? '64px' : '200px'" class="sidebar">
+    <div class="logo">
+      <h3 v-if="!isCollapse">Vue3 PC App</h3>
+      <h3 v-else>V3</h3>
+    </div>
+    
+    <el-menu
+      :default-active="route.path"
+      :collapse="isCollapse"
+      :unique-opened="true"
+      class="sidebar-menu"
+      @select="handleMenuClick"
+    >
+      <el-menu-item 
+        v-for="item in menuItems" 
+        :key="item.index"
+        :index="item.index"
+      >
+        <el-icon><component :is="item.icon" /></el-icon>
+        <template #title>{{ item.title }}</template>
+      </el-menu-item>
+    </el-menu>
+  </el-aside>
 
-      <!-- 右侧内容区域 -->
-      <el-container>
-        <!-- 顶部导航栏 -->
-        <el-header class="header">
-          <div class="header-left">
-            <el-button 
-              type="text" 
-              @click="toggleCollapse"
-              class="collapse-btn"
-            >
-              <el-icon><IconMenu /></el-icon>
-            </el-button>
-            <span class="breadcrumb">当前位置：{{ route.meta?.title || '数据渲染' }}</span>
-          </div>
-          <div class="header-right">
-            <el-dropdown>
-              <span class="user-info">
-                <el-icon><User /></el-icon>
-                管理员
-              </span>
-              <template #dropdown>
-                <el-dropdown-menu>
-                  <el-dropdown-item>个人中心</el-dropdown-item>
-                  <el-dropdown-item>修改密码</el-dropdown-item>
-                  <el-dropdown-item divided>退出登录</el-dropdown-item>
-                </el-dropdown-menu>
-              </template>
-            </el-dropdown>
-          </div>
-        </el-header>
-
-        <!-- 主内容区域 -->
-        <el-main class="main-content">
-          <router-view />
-        </el-main>
-      </el-container>
-    </el-container>
-  </div>
+  <!-- 右侧内容区域 -->
+  <el-container class="app-main">
+    <router-view class="app-main-view"/>
+  </el-container>
 </template>
 
 <style lang="scss" scoped>
-.app-container {
-  height: 100%;
-
-  :deep(.el-container) {
-    height: 100%;
-  }
-}
-
 .sidebar {
   background-color: #304156;
   transition: width 0.3s;
+}
+
+.app-main {
+
+  &-view {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
 }
 
 .logo {
@@ -167,51 +131,7 @@ const toggleCollapse = () => {
   color: #fff;
 }
 
-.header {
-  background-color: #fff;
-  border-bottom: 1px solid #e6e6e6;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-}
 
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.collapse-btn {
-  margin-right: 20px;
-  font-size: 18px;
-}
-
-.breadcrumb {
-  color: #606266;
-  font-size: 14px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  color: #606266;
-}
-
-.user-info:hover {
-  color: #409eff;
-}
-
-.main-content {
-  background-color: #f5f5f5;
-  padding: 20px;
-  overflow-y: auto;
-}
 
 /* 响应式设计 */
 @media (max-width: 768px) {
@@ -220,10 +140,6 @@ const toggleCollapse = () => {
   }
   
   .logo h3 {
-    display: none;
-  }
-  
-  .breadcrumb {
     display: none;
   }
 }
