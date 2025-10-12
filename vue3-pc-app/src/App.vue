@@ -5,7 +5,8 @@ import {
   DataAnalysis,
   Setting,
   User,
-  Document
+  Document,
+  MagicStick
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -22,19 +23,14 @@ const menuItems = [
     icon: DataAnalysis
   },
   {
-    index: '/users',
-    title: '用户管理',
+    index: '/component',
+    title: '组件 API 演示',
     icon: User
   },
   {
-    index: '/documents',
-    title: '文档管理',
-    icon: Document
-  },
-  {
-    index: '/settings',
-    title: '系统设置',
-    icon: Setting
+    index: '/builtin-components',
+    title: '内置组件演示',
+    icon: MagicStick
   }
 ]
 
