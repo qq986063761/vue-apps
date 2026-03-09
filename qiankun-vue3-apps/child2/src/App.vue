@@ -13,7 +13,7 @@
         @click="go('about')"
       >About</span>
     </nav>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
@@ -32,7 +32,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* 仅作用于子应用根及其子节点，不污染主应用 */
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

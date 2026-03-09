@@ -1,9 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     text: 'child1 的 store 数据',
     usrs: []

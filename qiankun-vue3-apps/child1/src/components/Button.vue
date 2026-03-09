@@ -1,28 +1,32 @@
 <template>
-  <el-button 
-    class="child1-button" 
-    type="primary" 
-    @click="handleClick">
+  <el-button
+    class="child1-button"
+    type="primary"
+    @click="handleClick"
+  >
     {{ text || '没获取到 child1 中 store 数据' }}
   </el-button>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import store from '@/store'
+import ajax from '@/ajax'
 
 export default {
   name: 'Child1Button',
-  mounted() {
-    console.log('child1 Button mounted', this)
-  },
   computed: {
-    ...mapState(['text'])
+    // 直接引用 child1 store 模块，不依赖 inject（支持跨应用使用）
+    text() {
+      return store.state.text
+    }
   },
   methods: {
-    handleClick(e) {
-      // 先触发自定义的点击处理
-      this.$ajax.post()
+    handleClick() {
+      ajax.post()
     }
+  },
+  mounted() {
+    console.log('child1 Button mounted')
   }
 }
 </script>

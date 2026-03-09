@@ -1,36 +1,32 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
 import './styles/global.scss'
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import plugin from './plugins'
-
-Vue.config.productionTip = false
-
-// 过滤报错
-Vue.config.warnHandler = function (msg, vm, trace) {
-  if (msg.includes('"style" is a reserved attribute')) {
-    return
-  }
-  console.warn(msg, trace)
-}
 
 // 全局配置子应用的远程暴露地址（主应用 Module Federation 用）
 window.__REMOTES__ = {
   child1: 'http://localhost:8081/remoteEntry.js'
 }
 
-Vue.use(ElementUI)
-Vue.use(plugin)
+const app = createApp(App)
 
-const vm = new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+// 注册所有 element-plus 图标
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
+
+app.use(router)
+app.use(store)
+app.use(ElementPlus)
+app.use(plugin)
+
+const vm = app.mount('#app')
 
 window.$app.vm = vm
 
-// 微应用改为在 MicroApp 组件首次挂载时再注册并启动（见 MicroApp.vue），保证对应 container 已存在
+// 微应用改为在 MicroApp 组件首次挂载时再注册并启动（见 micro-apps.js），保证对应 container 已存在

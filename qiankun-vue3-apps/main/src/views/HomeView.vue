@@ -29,13 +29,13 @@
           添加随机用户
         </el-button>
         <el-table :data="usrs" border style="width: 100%">
-          <el-table-column prop="id" label="ID" width="80"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-          <el-table-column prop="email" label="邮箱"></el-table-column>
-          <el-table-column prop="role" label="角色" width="100"></el-table-column>
+          <el-table-column prop="id" label="ID" width="80" />
+          <el-table-column prop="name" label="姓名" width="120" />
+          <el-table-column prop="email" label="邮箱" />
+          <el-table-column prop="role" label="角色" width="100" />
           <el-table-column label="操作" width="150">
-            <template slot-scope="scope">
-              <el-button size="mini" type="danger" @click="deleteUser(scope.row.id)">
+            <template #default="scope">
+              <el-button size="small" type="danger" @click="deleteUser(scope.row.id)">
                 删除
               </el-button>
             </template>
@@ -43,14 +43,13 @@
         </el-table>
       </div>
     </el-card>
-
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { ElMessage } from 'element-plus'
 
-// @ is an alias to /src
 export default {
   name: 'HomeView',
   computed: {
@@ -64,7 +63,7 @@ export default {
       const randomName = names[Math.floor(Math.random() * names.length)]
       const randomRole = roles[Math.floor(Math.random() * roles.length)]
       const newId = Math.max(...this.usrs.map(u => u.id), 0) + 1
-      
+
       this.addUsr({
         id: newId,
         name: randomName,
@@ -74,7 +73,7 @@ export default {
     },
     deleteUser(id) {
       this.deleteUsr(id)
-      this.$message.success('删除成功')
+      ElMessage.success('删除成功')
     }
   }
 }
@@ -110,25 +109,11 @@ export default {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .color-primary {
-      background-color: var(--primary);
-    }
-
-    .color-success {
-      background-color: var(--success);
-    }
-
-    .color-warning {
-      background-color: var(--warning);
-    }
-
-    .color-danger {
-      background-color: var(--danger);
-    }
-
-    .color-info {
-      background-color: var(--info);
-    }
+    .color-primary { background-color: var(--primary); }
+    .color-success { background-color: var(--success); }
+    .color-warning { background-color: var(--warning); }
+    .color-danger  { background-color: var(--danger); }
+    .color-info    { background-color: var(--info); }
   }
 }
 </style>

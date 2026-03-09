@@ -1,55 +1,54 @@
 import './public-path'
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import store from './store'
-import { createRouter } from './router'
-import ElementUI from 'element-ui'
-// import 'element-ui/lib/theme-chalk/index.css'
+import { createChildRouter } from './router'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import plugin, { initWindowParentApp } from './plugins'
 
-Vue.config.productionTip = false
-Vue.use(ElementUI)
-Vue.use(plugin)
-
 let routerInstance = null
-let instance = null
+let vueApp = null
 
-/** 配合主应用 keep-alive：unmount 时不销毁实例，仅移出 DOM；mount 时优先复用 */
-const instanceCache = { instance: null, routerInstance: null }
+// 保活缓存：unmount 时不销毁实例，仅移出 DOM；mount 时优先复用
+const instanceCache = { vueApp: null, routerInstance: null, el: null }
 
 function render(props = {}) {
   const { container } = props
-  routerInstance = createRouter()
+  routerInstance = createChildRouter()
   window.__CHILD_ROUTER_INSTANCE__ = routerInstance
-  instance = new Vue({
-    router: routerInstance,
-    store,
-    render: h => h(App)
-  }).$mount(container ? container.querySelector('#app') : '#app')
+
+  vueApp = createApp(App)
+  vueApp.use(routerInstance)
+  vueApp.use(store)
+  vueApp.use(ElementPlus)
+  vueApp.use(plugin)
+
+  const mountEl = container ? container.querySelector('#app') : document.querySelector('#app')
+  vueApp.mount(mountEl)
 
   if (props.init) {
-    props.init({ window, vm: instance })
+    props.init({ window, vm: vueApp })
   }
 }
 
-/** 将已存在的实例挂回容器，不重新创建 Vue（用于配合主应用 keep-alive 缓存状态） */
 function restoreFromCache(props) {
   const { container } = props
-  const cached = instanceCache.instance
-  if (!cached || !cached.$el) return false
+  const cached = instanceCache.vueApp
+  if (!cached || !instanceCache.el) return false
   const wrap = container || document.getElementById('subapp-child2')
   if (!wrap) return false
   const appEl = wrap.querySelector('#app')
   if (appEl && appEl.parentNode) {
-    appEl.parentNode.replaceChild(cached.$el, appEl)
+    appEl.parentNode.replaceChild(instanceCache.el, appEl)
   } else {
-    wrap.appendChild(cached.$el)
+    wrap.appendChild(instanceCache.el)
   }
-  instance = cached
+  vueApp = cached
   routerInstance = instanceCache.routerInstance
   window.__CHILD_ROUTER_INSTANCE__ = routerInstance
   if (props.init) {
-    props.init({ window, vm: instance })
+    props.init({ window, vm: vueApp })
   }
   return true
 }
@@ -75,14 +74,15 @@ export async function mount(props) {
 
 export async function unmount() {
   console.log('child2 unmount')
-  if (instance) {
-    instanceCache.instance = instance
+  if (vueApp) {
+    instanceCache.vueApp = vueApp
     instanceCache.routerInstance = routerInstance
-    const el = instance.$el
+    instanceCache.el = vueApp._container
+    const el = vueApp._container
     if (el && el.parentNode) {
       el.parentNode.removeChild(el)
     }
-    instance = null
+    vueApp = null
     routerInstance = null
   }
   window.__CHILD_ROUTER_INSTANCE__ = null

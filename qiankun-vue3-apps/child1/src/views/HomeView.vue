@@ -17,7 +17,7 @@
       <template #header>
         <span>切换子应用后返回，数据能被缓存</span>
       </template>
-      <el-input v-model="input" placeholder="请输入内容，切换子应用返回能保存状态"/>
+      <el-input v-model="input" placeholder="请输入内容，切换子应用返回能保存状态" />
     </el-card>
 
     <el-card class="card" shadow="hover">
@@ -37,13 +37,13 @@
           title="暂无用户数据"
           type="info"
           :closable="false"
-          style="margin-bottom: 16px;">
-        </el-alert>
+          style="margin-bottom: 16px;"
+        />
         <el-table v-else :data="usrs" border style="width: 100%">
-          <el-table-column prop="id" label="ID" width="80"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="120"></el-table-column>
-          <el-table-column prop="email" label="邮箱"></el-table-column>
-          <el-table-column prop="role" label="角色" width="100"></el-table-column>
+          <el-table-column prop="id" label="ID" width="80" />
+          <el-table-column prop="name" label="姓名" width="120" />
+          <el-table-column prop="email" label="邮箱" />
+          <el-table-column prop="role" label="角色" width="100" />
         </el-table>
       </div>
     </el-card>
@@ -64,25 +64,15 @@ export default {
     ...mapState(['usrs'])
   },
   mounted() {
-    // 初始化时从主应用同步数据
     this.syncUsrsFromMain()
   },
   methods: {
     handleClick() {
-      // 优先用无界to（跨域安全），同域或独立运行时回退到 window.parent
-      const { to } = window.$app
-      
-      to({
-        app: 'child2',
-        name: 'about',
-        query: {},
-        params: {}
-      })
+      window.$app.to({ app: 'child2', name: 'about', query: {}, params: {} })
     },
     syncUsrsFromMain() {
-      // 从主应用获取初始数据
       const parentApp = window.$parentApp
-      if (parentApp && parentApp.store && parentApp.store.state.usrs) {
+      if (parentApp?.store?.state?.usrs) {
         this.$store.commit('SET_USRS', parentApp.store.state.usrs)
       }
     }
@@ -120,25 +110,11 @@ export default {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
-    .color-primary {
-      background-color: var(--primary);
-    }
-
-    .color-success {
-      background-color: var(--success);
-    }
-
-    .color-warning {
-      background-color: var(--warning);
-    }
-
-    .color-danger {
-      background-color: var(--danger);
-    }
-
-    .color-info {
-      background-color: var(--info);
-    }
+    .color-primary { background-color: var(--primary); }
+    .color-success { background-color: var(--success); }
+    .color-warning { background-color: var(--warning); }
+    .color-danger  { background-color: var(--danger); }
+    .color-info    { background-color: var(--info); }
   }
 }
 </style>

@@ -1,7 +1,7 @@
 {
-  "name": "qiankun-vue2-demo",
+  "name": "qiankun-vue3-demo",
   "version": "1.0.0",
-  "description": "基于 Vue2 + qiankun 的微前端架构演示项目",
+  "description": "基于 Vue3 + qiankun 的微前端架构演示项目",
   "scripts": {
     "install:all": "npm i && npm run install:main && npm run install:child1 && npm run install:child2",
     "install:main": "cd main && npm install",
@@ -23,17 +23,13 @@
     "rimraf": "^3.0.2"
   },
   "keywords": [
-    "vue2",
+    "vue3",
     "qiankun",
     "micro-frontend",
     "微前端",
-    "vuex",
+    "pinia",
     "vue-router"
   ],
   "author": "Your Name",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/umijs/qiankun"
-  }
+  "license": "MIT"
 }

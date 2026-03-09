@@ -2,10 +2,12 @@
   <div id="app" class="main-app">
     <SideMenu />
     <div class="main-content">
-      <!-- keep-alive 缓存主应用路由组件；子应用保活见 micro-apps.js 的 childAppActiveRule -->
-      <keep-alive>
-        <router-view />
-      </keep-alive>
+      <!-- Vue3 中 keep-alive 需配合 router-view 插槽使用 -->
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </div>
   </div>
 </template>
@@ -26,21 +28,18 @@ export default {
   watch: {
     theme: {
       handler() {
-        // 主题切换时，更新主应用主题
         injectThemeToDocument(document)
       },
       immediate: true
     }
   },
   mounted() {
-    // 初始化时注入主题
     injectThemeToDocument(document)
   }
 }
 </script>
 
 <style lang="scss" scoped>
-/* 仅作用于主应用根及其子节点，不污染子应用 */
 #app.main-app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

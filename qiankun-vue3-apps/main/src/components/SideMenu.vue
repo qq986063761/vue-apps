@@ -2,25 +2,27 @@
   <div class="side-menu">
     <div class="menu-header">
       <h2>微前端应用</h2>
-      <el-tooltip 
+      <el-tooltip
         :content="currentTheme === 'light' ? '当前为浅色主题' : '当前为深色主题'"
         placement="bottom"
       >
-        <button 
-          class="theme-toggle-btn" 
+        <button
+          class="theme-toggle-btn"
           :style="{ backgroundColor: themeColor }"
           @click="toggleTheme"
         ></button>
       </el-tooltip>
     </div>
     <ul class="menu-list">
-      <li 
-        v-for="item in menuItems" 
+      <li
+        v-for="item in menuItems"
         :key="item.childApp || item.routeName"
         :class="{ active: isMenuActive(item) }"
         @click="navigateTo(item)"
       >
-        <i :class="item.icon"></i>
+        <el-icon class="menu-icon">
+          <component :is="item.icon" />
+        </el-icon>
         <span>{{ item.name }}</span>
       </li>
     </ul>
@@ -39,12 +41,12 @@ export default {
         {
           routeName: 'home',
           name: '首页',
-          icon: 'el-icon-house'
+          icon: 'House'
         },
         {
           routeName: 'child1',
           name: 'Child1',
-          icon: 'el-icon-document',
+          icon: 'Document',
           childApp: 'child1',
           childRoute: {
             name: 'home',
@@ -55,7 +57,7 @@ export default {
         {
           routeName: 'child2',
           name: 'Child2',
-          icon: 'el-icon-folder',
+          icon: 'Folder',
           childApp: 'child2',
           childRoute: {
             name: 'home',
@@ -71,7 +73,6 @@ export default {
     currentRouteName() {
       return this.$route.name
     },
-    /** 当前激活的子应用（由 path /child1* 或 /child2* 推断） */
     currentChildApp() {
       const path = this.$route.path || ''
       if (path.startsWith('/child1')) return 'child1'
@@ -86,7 +87,6 @@ export default {
     }
   },
   methods: {
-    /** 菜单项是否激活：首页看 routeName，子应用看 currentChildApp（因子应用有 /child1、/child1/home 等多条路由） */
     isMenuActive(item) {
       if (item.childApp) return this.currentChildApp === item.childApp
       return this.currentRouteName === item.routeName
@@ -94,13 +94,8 @@ export default {
     ...mapActions(['toggleTheme']),
     navigateTo(item) {
       const { routeName, childApp, childRoute } = item
-
-      // 子应用跳转
       if (childApp) {
-        window.$app.to({
-          app: childApp,
-          ...childRoute
-        })
+        window.$app.to({ app: childApp, ...childRoute })
       } else {
         this.$router.push({ name: routeName })
       }
@@ -125,7 +120,7 @@ export default {
     border-bottom: 1px solid #434a50;
     display: flex;
     align-items: center;
-    
+
     h2 {
       color: #fff;
       margin: 0;
@@ -177,7 +172,7 @@ export default {
         color: #fff;
       }
 
-      i {
+      .menu-icon {
         margin-right: 10px;
         font-size: 16px;
       }

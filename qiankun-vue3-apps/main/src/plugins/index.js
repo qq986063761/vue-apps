@@ -1,3 +1,4 @@
+import { defineAsyncComponent, h } from 'vue'
 import router from '@/router'
 import store from '@/store'
 
@@ -6,22 +7,20 @@ window.$app = {
   vm: null,
   store,
   router,
-  components: {}, // 提供给子应用的内联组件
-  // 子应用列表（乾坤模式下通过 props.init({ window, vm }) 传入，主应用通过 slot.window / slot.vm 访问子应用）
+  components: {},
   apps: {
-    child1: { 
+    child1: {
       window: null,
       vm: null
     },
-    child2: { 
-      window: null, 
-      vm: null 
+    child2: {
+      window: null,
+      vm: null
     }
   },
   /**
    * 跳转路由
-   * 子应用：先改主应用 path（hash）激活子应用，再通过子应用 window.$app.to 让子应用自己跳路由（支持 params/query）
-   * 子应用未挂载时每 60ms 轮询直到可调用子应用 to
+   * 子应用通过 window.$app.to 跳转，支持跨应用路由
    */
   to({ app, name, query, params, method = 'push' }) {
     if (app) {
@@ -34,7 +33,7 @@ window.$app = {
         childTo(payload)
       } else {
         let count = 0
-        const maxRetry = 50 // 约 3 秒后放弃
+        const maxRetry = 50
         const timer = setInterval(() => {
           const s = window.$app.apps[app]
           const to = s?.window?.$app?.to
@@ -50,7 +49,6 @@ window.$app = {
       router[method]({ name, params, query })
     }
   },
-  // 使用组件（优先从 MF 暴露的 slot[name]，如 child1 的 modal/Button）
   use({ app, name = '', method = '', args = [] }) {
     console.log('main use', app, name, method, args)
     const slot = window.$app.apps[app]
@@ -58,7 +56,6 @@ window.$app = {
     return target && typeof target[method] === 'function' ? target[method](...args) : undefined
   },
   on() {},
-  // 向所有子应用发送事件通知（通过 slot.window.$app 访问子应用）
   emit(type, data) {
     Object.keys(window.$app.apps).forEach(appName => {
       const slot = window.$app.apps[appName]
@@ -74,40 +71,32 @@ window.$app = {
   }
 }
 
-// 异步组件加载中占位（用 render 避免依赖模板编译器）
-const Child1ButtonLoading = {
-  render(h) {
-    return h('div', '组件加载中...')
-  }
-}
-
 export default {
-  async install(Vue) {
-    const { child1 } = window.$app.apps
-
-    Vue.component('Child1Button', () => ({
-      component: new Promise(resolve => {
-        const next = () => {
-          const { Button } = child1
-          if (!Button) {
-            setTimeout(next, 60)
+  install(app) {
+    // 注册 Child1Button 异步组件（等待 child1 export 加载完成后解析）
+    app.component('Child1Button', defineAsyncComponent({
+      loader: () => new Promise(resolve => {
+        const { child1 } = window.$app.apps
+        const tryResolve = () => {
+          if (child1.Button) {
+            resolve(child1.Button)
           } else {
-            resolve(Button)
+            setTimeout(tryResolve, 60)
           }
         }
-        next()
+        tryResolve()
       }),
-      loading: Child1ButtonLoading
+      loadingComponent: { render: () => h('div', '组件加载中...') }
     }))
 
-    // 引入 child1 的插件
-    const child1Export = await import('child1/export')
-    const { Button, modal } = child1Export.default
-
-    // 保存子组件的组件
-    child1.Button = Button
-    child1.modal = modal
-
-    console.log('main 中 child1 组件加载完成', child1Export.default)
+    // 异步加载 child1 通过 Module Federation 暴露的组件
+    import('child1/export').then(m => {
+      const { Button, modal } = m.default
+      window.$app.apps.child1.Button = Button
+      window.$app.apps.child1.modal = modal
+      console.log('main 中 child1 组件加载完成', m.default)
+    }).catch(e => {
+      console.warn('child1/export 加载失败（子应用可能未启动）', e)
+    })
   }
 }

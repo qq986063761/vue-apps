@@ -1,9 +1,6 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
+export default createStore({
   state: {
     theme: 'light', // light, dark
     usrs: [
@@ -23,14 +20,12 @@ export default new Vuex.Store({
     },
     SET_USRS(state, usrs) {
       state.usrs = usrs
-      // 通知子应用更新
       if (window.$app && window.$app.emit) {
         window.$app.emit('store-state', { prop: 'usrs', value: usrs })
       }
     },
     ADD_USR(state, usr) {
       state.usrs = [...state.usrs, usr]
-      // 通知子应用更新
       if (window.$app && window.$app.emit) {
         window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
       }
@@ -39,7 +34,6 @@ export default new Vuex.Store({
       const index = state.usrs.findIndex(u => u.id === id)
       if (index !== -1) {
         state.usrs[index] = { ...state.usrs[index], ...updates }
-        // 通知子应用更新
         if (window.$app && window.$app.emit) {
           window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
         }
@@ -47,7 +41,6 @@ export default new Vuex.Store({
     },
     DELETE_USR(state, id) {
       state.usrs = state.usrs.filter(u => u.id !== id)
-      // 通知子应用更新
       if (window.$app && window.$app.emit) {
         window.$app.emit('store-state', { prop: 'usrs', value: state.usrs })
       }
