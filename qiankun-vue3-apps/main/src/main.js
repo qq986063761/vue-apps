@@ -1,3 +1,14 @@
+window.__APP_CONFIG__ = {
+  federation: {
+    child1: 'http://localhost:8081',
+    child2: 'http://localhost:8082'
+  },
+  qiankun: {
+    child1: '//localhost:8081',
+    child2: '//localhost:8082'
+  }
+}
+
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
