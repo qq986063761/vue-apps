@@ -8,11 +8,6 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import plugin from './plugins'
 
-// 全局配置子应用的远程暴露地址（主应用 Module Federation 用）
-window.__REMOTES__ = {
-  child1: 'http://localhost:8081/remoteEntry.js'
-}
-
 const app = createApp(App)
 
 // 注册所有 element-plus 图标

@@ -1,4 +1,5 @@
 import store from '@/store'
+import ajax from '@/ajax'
 
 // 使用当前 render 内创建的路由实例（qiankun 每次 mount 新建），避免与默认单例不一致
 const getRouter = () => window.__CHILD_ROUTER_INSTANCE__ || null
@@ -76,7 +77,6 @@ window.$app = {
 export default {
   install(app) {
     // 初始化应用内 ajax
-    const ajax = require('@/ajax').default
     app.config.globalProperties.$ajax = ajax
     store.dispatch('getData')
   }
