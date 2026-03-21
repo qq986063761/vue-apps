@@ -1,16 +1,13 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import federation from '@originjs/vite-plugin-federation'
-import qiankun from 'vite-plugin-qiankun-lite'
+import qiankun from 'vite-plugin-qiankun'
 import { resolve } from 'path'
 
 export default defineConfig({
   plugins: [
     vue(),
-    qiankun({
-      name: 'child2-app',
-      sandbox: true
-    }),
+    qiankun('child2-app', { useDevMode: true }),
     federation({
       name: 'child2',
       filename: 'remoteEntry.js',

@@ -64,7 +64,8 @@ export function bootstrap() {
 }
 
 export function mount(props) {
-  console.log('child1 mount', props)
+  window.appName = 'child1'
+  console.log('child1 mount', props, window)
   window.__QIANKUN_PROPS__ = props
   initWindowParentApp()
   if (restoreFromCache(props)) return

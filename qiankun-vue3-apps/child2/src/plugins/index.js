@@ -1,5 +1,6 @@
 import { defineAsyncComponent, h } from 'vue'
 import store from '@/store'
+import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 
 const getRouter = () => window.__CHILD_ROUTER_INSTANCE__ || null
 
@@ -12,8 +13,8 @@ function shallowEqual(a, b) {
   return keysA.every(k => A[k] === B[k])
 }
 
-// 提供给父应用（主应用在对应乾坤生命周期会调用以下可选钩子）
-window.$app = {
+// child2 自身的 $app 接口对象（供主应用通过 slot.$app 访问）
+export const child2App = {
   vm: null,
   store,
   get router() {
@@ -31,7 +32,6 @@ window.$app = {
     console.log('child2 to', name, params, query)
     const r = getRouter()
     if (!r) return
-    // Vue Router 4 中 currentRoute 是 ref，需要 .value
     const cur = r.currentRoute.value
     const sameName = cur.name === name
     const sameParams = shallowEqual(cur.params, params ?? {})
@@ -54,6 +54,11 @@ window.$app = {
     return use({ app, name, method, args })
   },
   on() {}
+}
+
+// 独立运行时挂到 window.$app；qiankun 沙箱模式下沙箱 window 隔离，不影响主应用
+if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
+  window.$app = child2App
 }
 
 // 在 window.__QIANKUN_PROPS__ 赋值之后由 main.js 调用，再挂载 $parentApp

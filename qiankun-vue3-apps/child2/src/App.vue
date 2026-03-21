@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted() {
-    console.log('child2 App mounted', window.__POWERED_BY_QIANKUN__ ? 'qiankun' : 'standalone', window.location.href)
+    console.log('child2 App mounted', window.__QIANKUN_PROPS__ ? 'qiankun' : 'standalone', window.location.href)
   }
 }
 </script>
