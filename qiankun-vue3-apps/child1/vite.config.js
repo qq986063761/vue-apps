@@ -57,7 +57,7 @@ export default defineConfig({
     }
   },
   preview: {
-    port: 8081,
+    port: 8083,
     cors: true,
     headers: {
       'Access-Control-Allow-Origin': '*'
