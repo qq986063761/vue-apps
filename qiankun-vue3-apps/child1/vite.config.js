@@ -9,7 +9,7 @@ export default defineConfig({
     vue(),
     qiankun({
       name: 'child1-app',
-      sandbox: false
+      sandbox: true
     }),
     federation({
       name: 'child1',
@@ -17,12 +17,7 @@ export default defineConfig({
       exposes: {
         './export': './src/plugins/export.js'
       },
-      shared: ['vue'],
-//   shared: {
-//     vue: {
-//       singleton: false, // 设置为 false，允许每个应用使用自己的 Vue 实例（适用于版本不一致的情况）
-//     },
-//   },
+      shared: ['vue']
     })
   ],
   resolve: {
