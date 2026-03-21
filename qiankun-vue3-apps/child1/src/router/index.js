@@ -8,7 +8,7 @@ function getRoutes() {
   return [
     ...(isQiankun
       ? [{ path: '/child1', redirect: '/child1/home' }]
-      : []),
+      : [{ path: '/', redirect: '/home' }]),
     {
       path: prefix + '/home',
       name: 'home',

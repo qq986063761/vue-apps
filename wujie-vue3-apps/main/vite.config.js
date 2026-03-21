@@ -12,7 +12,7 @@ export default defineConfig({
       // 在开发模式下需要声明 remotes，即使 URL 是动态的
       // 这样插件才能生成 virtual:__federation__ 虚拟模块
       // 运行时可以通过 setRemote API 动态更新 URL
-      // 注意：开发模式下也需要使用 /assets/remoteEntry.js（需要 child1 先构建）
+      // 注意：开发模式下也需要使用 /assets/remoteEntry.js（需要 child1 先用 build 构建）
       remotes: {
         child1: 'http://localhost:8081/assets/remoteEntry.js',
       },

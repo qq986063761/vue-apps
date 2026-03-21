@@ -17,7 +17,12 @@ export default defineConfig({
       exposes: {
         './export': './src/plugins/export.js'
       },
-      shared: ['vue']
+      shared: ['vue'],
+//   shared: {
+//     vue: {
+//       singleton: false, // 设置为 false，允许每个应用使用自己的 Vue 实例（适用于版本不一致的情况）
+//     },
+//   },
     })
   ],
   resolve: {
