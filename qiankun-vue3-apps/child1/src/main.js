@@ -5,10 +5,6 @@ import { createChildRouter } from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import plugin, { initWindowParentApp } from './plugins'
-import {
-  renderWithQiankun,
-  qiankunWindow
-} from 'vite-plugin-qiankun/dist/helper'
 
 let routerInstance = null
 let vueApp = null
@@ -57,41 +53,41 @@ function restoreFromCache(props) {
   return true
 }
 
-if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
+// 独立运行时直接渲染（vite-plugin-qiankun-lite 会将 window 代理到沙箱 window）
+if (!window.__POWERED_BY_QIANKUN__) {
   initWindowParentApp()
   render()
-} else {
-  renderWithQiankun({
-    bootstrap() {
-      console.log('child1 bootstrap')
-    },
-    mount(props) {
-      console.log('child1 mount', props)
-      window.__QIANKUN_PROPS__ = props
-      initWindowParentApp()
-      if (restoreFromCache(props)) {
-        return
-      }
-      render(props)
-    },
-    unmount() {
-      console.log('child1 unmount')
-      if (vueApp) {
-        // 保存实例引用，移出 DOM 而不销毁
-        instanceCache.vueApp = vueApp
-        instanceCache.routerInstance = routerInstance
-        instanceCache.el = vueApp._container
-        const el = vueApp._container
-        if (el && el.parentNode) {
-          el.parentNode.removeChild(el)
-        }
-        vueApp = null
-        routerInstance = null
-      }
-      window.__CHILD_ROUTER_INSTANCE__ = null
-    },
-    update(props) {
-      console.log('child1 update', props)
+}
+
+export function bootstrap() {
+  console.log('child1 bootstrap')
+}
+
+export function mount(props) {
+  console.log('child1 mount', props)
+  window.__QIANKUN_PROPS__ = props
+  initWindowParentApp()
+  if (restoreFromCache(props)) return
+  render(props)
+}
+
+export function unmount() {
+  console.log('child1 unmount')
+  if (vueApp) {
+    // 保存实例引用，移出 DOM 而不销毁
+    instanceCache.vueApp = vueApp
+    instanceCache.routerInstance = routerInstance
+    instanceCache.el = vueApp._container
+    const el = vueApp._container
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el)
     }
-  })
+    vueApp = null
+    routerInstance = null
+  }
+  window.__CHILD_ROUTER_INSTANCE__ = null
+}
+
+export function update(props) {
+  console.log('child1 update', props)
 }
