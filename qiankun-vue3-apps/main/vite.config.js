@@ -14,7 +14,7 @@ export default defineConfig({
           // 未设置时退回 http://localhost:8081，避免 config.js 未加载时报错。
           external: `Promise.resolve(
             ((window.__APP_CONFIG__?.federation?.child1) || 'http://localhost:8081')
-            + '/remoteEntry.js'
+            + '/assets/remoteEntry.js'
           )`,
           externalType: 'promise',
           format: 'esm',
@@ -23,7 +23,7 @@ export default defineConfig({
         child2: {
           external: `Promise.resolve(
             ((window.__APP_CONFIG__?.federation?.child2) || 'http://localhost:8082')
-            + '/remoteEntry.js'
+            + '/assets/remoteEntry.js'
           )`,
           externalType: 'promise',
           format: 'esm',

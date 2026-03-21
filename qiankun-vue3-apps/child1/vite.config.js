@@ -9,7 +9,7 @@ export default defineConfig({
     vue(),
     qiankun({
       name: 'child1-app',
-      sandbox: true
+      sandbox: false
     }),
     federation({
       name: 'child1',
