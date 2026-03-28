@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useItemsStore } from '~/stores/items'
+
 const store = useItemsStore()
 const draft = ref('')
 const editingId = ref<string | null>(null)
