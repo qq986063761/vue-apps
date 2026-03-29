@@ -13,6 +13,10 @@ node_modules
 logs
 *.log
 
+# Demo uploads（保留目录，忽略用户上传内容）
+public/uploads/*
+!public/uploads/.gitkeep
+
 # Misc
 .DS_Store
 .fleet

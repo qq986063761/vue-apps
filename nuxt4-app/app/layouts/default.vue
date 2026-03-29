@@ -6,6 +6,7 @@
         <NuxtLink to="/">首页</NuxtLink>
         <NuxtLink to="/about">关于</NuxtLink>
         <NuxtLink to="/items">全栈 CRUD</NuxtLink>
+        <NuxtLink to="/uploads">文件上传</NuxtLink>
       </nav>
     </header>
     <main class="main">
@@ -46,7 +47,7 @@
   text-decoration: underline;
 }
 .main {
-  max-width: 42rem;
+  max-width: 48rem;
   margin: 0 auto;
   padding: 1.5rem 1rem 2rem;
 }
