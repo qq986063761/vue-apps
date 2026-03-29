@@ -12,12 +12,12 @@ const navItems = computed<NavigationMenuItem[]>(() => [
 
 <template>
   <div class="min-h-dvh flex flex-col bg-muted">
-    <UHeader class="border-b border-default">
-      <template #title>
-        <NuxtLink to="/" class="text-highlighted font-semibold">
-          nuxt4-app demo
-        </NuxtLink>
-      </template>
+    <UHeader
+      to="/"
+      title="nuxt4-app demo"
+      class="border-b border-default"
+      :ui="{ title: 'text-highlighted font-semibold' }"
+    >
 
       <UNavigationMenu :items="navItems" />
 
