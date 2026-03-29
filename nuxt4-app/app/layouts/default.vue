@@ -1,54 +1,39 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { NavigationMenuItem } from '@nuxt/ui'
+
+const navItems = computed<NavigationMenuItem[]>(() => [
+  { label: '首页', to: '/' },
+  { label: '关于', to: '/about' },
+  { label: '全栈 CRUD', to: '/items' },
+  { label: '文件上传', to: '/uploads' }
+])
+</script>
+
 <template>
-  <div class="layout">
-    <header class="header">
-      <strong class="brand">nuxt4-app demo</strong>
-      <nav class="nav">
-        <NuxtLink to="/">首页</NuxtLink>
-        <NuxtLink to="/about">关于</NuxtLink>
-        <NuxtLink to="/items">全栈 CRUD</NuxtLink>
-        <NuxtLink to="/uploads">文件上传</NuxtLink>
-      </nav>
-    </header>
-    <main class="main">
-      <slot />
-    </main>
+  <div class="min-h-dvh flex flex-col bg-muted">
+    <UHeader class="border-b border-default">
+      <template #title>
+        <NuxtLink to="/" class="text-highlighted font-semibold">
+          nuxt4-app demo
+        </NuxtLink>
+      </template>
+
+      <UNavigationMenu :items="navItems" />
+
+      <template #body>
+        <UNavigationMenu
+          :items="navItems"
+          orientation="vertical"
+          class="-mx-2.5"
+        />
+      </template>
+    </UHeader>
+
+    <UMain class="flex-1">
+      <UContainer class="max-w-3xl py-6 pb-8">
+        <slot />
+      </UContainer>
+    </UMain>
   </div>
 </template>
-
-<style scoped>
-.layout {
-  min-height: 100vh;
-  font-family: system-ui, sans-serif;
-  color: #1a1a1a;
-  background: #f6f7f9;
-}
-.header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem 1.5rem;
-  padding: 0.75rem 1.25rem;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
-}
-.brand {
-  font-size: 1rem;
-}
-.nav {
-  display: flex;
-  gap: 1rem;
-}
-.nav a {
-  color: #2563eb;
-  text-decoration: none;
-}
-.nav a.router-link-active {
-  font-weight: 600;
-  text-decoration: underline;
-}
-.main {
-  max-width: 48rem;
-  margin: 0 auto;
-  padding: 1.5rem 1rem 2rem;
-}
-</style>
