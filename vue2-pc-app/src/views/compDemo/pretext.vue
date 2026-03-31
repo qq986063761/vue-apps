@@ -29,14 +29,8 @@
           :max="640"
           :show-tooltip="false"/>
       </p>
-      <p>
-        行高 {{ lineHeight }}px
-        <el-slider
-          v-model="lineHeight"
-          :min="16"
-          :max="40"
-          :show-tooltip="false"/>
-      </p>
+      <p>当前字体（来自 CSS）：<code>{{ fontCss }}</code></p>
+      <p>当前行高（来自 CSS）：<code>{{ cssLineHeight }}px</code></p>
     </div>
 
     <div class="block">
@@ -49,7 +43,8 @@
 
     <div class="block">
       <p><strong>prepareWithSegments + layoutWithLines（逐行排版预览）</strong></p>
-      <p class="hint">字体与测量一致：<code>{{ fontCss }}</code></p>
+      <p class="hint">测量参数从 CSS 自动读取，便于对比实际渲染。</p>
+      <div ref="styleProbe" class="style-probe">style probe</div>
       <div
         v-if="lines"
         class="line-preview"
@@ -78,8 +73,6 @@
     layoutWithLines
   } from '@chenglou/pretext'
 
-  const FONT = '16px Arial, sans-serif'
-
   export default {
     name: 'PretextDemo',
     data() {
@@ -87,20 +80,18 @@
         sampleText:
           'AGI 春天到了. بدأت الرحلة 🚀 Pretext measures paragraphs without DOM reflow.',
         maxWidth: 320,
-        lineHeight: 24,
+        fontCss: '',
+        cssLineHeight: 24,
         prepared: null,
         preparedSeg: null
       }
     },
     computed: {
-      fontCss() {
-        return FONT
-      },
       measure() {
         if (!this.prepared) {
           return null
         }
-        return layout(this.prepared, this.maxWidth, this.lineHeight)
+        return layout(this.prepared, this.maxWidth, this.cssLineHeight)
       },
       lines() {
         if (!this.preparedSeg) {
@@ -109,31 +100,58 @@
         return layoutWithLines(
           this.preparedSeg,
           this.maxWidth,
-          this.lineHeight
+          this.cssLineHeight
         )
       },
       previewBoxStyle() {
         return {
           width: `${this.maxWidth}px`,
-          font: FONT,
-          lineHeight: `${this.lineHeight}px`
+          font: this.fontCss,
+          lineHeight: `${this.cssLineHeight}px`
         }
       },
       lineRowStyle() {
         return {
-          minHeight: `${this.lineHeight}px`,
-          lineHeight: `${this.lineHeight}px`
+          minHeight: `${this.cssLineHeight}px`,
+          lineHeight: `${this.cssLineHeight}px`
         }
       }
+    },
+    mounted() {
+      this.refreshTextMetrics()
     },
     watch: {
       sampleText: {
         immediate: true,
         handler(val) {
+          if (!this.fontCss) {
+            return
+          }
           const text = val == null ? '' : String(val)
-          this.prepared = prepare(text, FONT)
-          this.preparedSeg = prepareWithSegments(text, FONT)
+          this.prepared = prepare(text, this.fontCss)
+          this.preparedSeg = prepareWithSegments(text, this.fontCss)
         }
+      }
+    },
+    methods: {
+      refreshTextMetrics() {
+        this.$nextTick(() => {
+          const probe = this.$refs.styleProbe
+          if (!probe) {
+            return
+          }
+          const styles = window.getComputedStyle(probe)
+          this.fontCss = styles.font
+          const pxLineHeight = parseFloat(styles.lineHeight)
+          const pxFontSize = parseFloat(styles.fontSize)
+          this.cssLineHeight = Number.isNaN(pxLineHeight)
+            ? Math.round((Number.isNaN(pxFontSize) ? 16 : pxFontSize) * 1.2)
+            : pxLineHeight
+
+          const text = this.sampleText == null ? '' : String(this.sampleText)
+          this.prepared = prepare(text, this.fontCss)
+          this.preparedSeg = prepareWithSegments(text, this.fontCss)
+        })
       }
     }
   }
@@ -160,9 +178,21 @@
     padding: 8px;
     background: #fafafa;
     word-break: break-word;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: Arial, sans-serif;
   }
 
   .line-preview__row {
     white-space: pre-wrap;
+  }
+
+  .style-probe {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: Arial, sans-serif;
   }
 </style>
