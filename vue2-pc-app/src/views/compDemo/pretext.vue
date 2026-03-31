@@ -177,14 +177,18 @@
     border: 1px solid #ccc;
     padding: 8px;
     background: #fafafa;
-    word-break: break-word;
+    box-sizing: content-box;
+    overflow-wrap: normal;
+    word-break: normal;
     font-size: 16px;
     line-height: 24px;
     font-family: Arial, sans-serif;
   }
 
   .line-preview__row {
-    white-space: pre-wrap;
+    white-space: pre;
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   .style-probe {
