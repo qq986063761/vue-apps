@@ -68,9 +68,13 @@
 
 <script>
   import {
+    // 预处理文本（轻量结果，给 layout 用）
     prepare,
+    // 预处理文本（包含 segments 细节，给 layoutWithLines 用）
     prepareWithSegments,
+    // 计算总行数和总高度
     layout,
+    // 计算总行数/总高度，并返回每一行内容
     layoutWithLines
   } from '@chenglou/pretext'
 
