@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import comment from '@/views/compDemo/comment'
 import ssBar from '@/views/compDemo/ssBar'
 import scaleTool from '@/views/compDemo/scaleTool/scaleTool'
+import pretext from '@/views/compDemo/pretext'
 import drClick from '@/views/directiveDemo/drClick'
 import drag from '@/views/directiveDemo/drag'
 import scrollActiveItem from '@/views/directiveDemo/scrollActiveItem'
@@ -83,6 +84,11 @@ const routes = [
     path: '/scaleTool', 
     name: 'scaleTool',
     component: scaleTool
+  },
+  {
+    path: '/pretext',
+    name: 'pretext',
+    component: pretext
   },
   // 指令
   { 

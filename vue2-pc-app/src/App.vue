@@ -43,7 +43,7 @@
         menus: [
           {
             path: '/api',
-            label: 'vue2 的 api',
+            label: 'api',
             children: [
               {
                 path: '/apiTemplate',
@@ -86,6 +86,10 @@
               {
                 path: '/scaleTool',
                 label: '页面拖拽缩放',
+              },
+              {
+                path: '/pretext',
+                label: 'Pretext 文本布局',
               }
             ]
           },
