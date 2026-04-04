@@ -2,6 +2,10 @@
   "name": "wujie-vue3-micro-frontend-demo",
   "version": "1.0.0",
   "description": "基于 Vue3 + wujie 的微前端架构演示项目",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">= 3.0.0"
+  },
   "scripts": {
     "install:all": "npm i && npm run install:main && npm run install:child1 && npm run install:child2",
     "install:main": "cd main && npm install",
