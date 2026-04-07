@@ -4,6 +4,7 @@ import comment from '@/views/compDemo/comment'
 import ssBar from '@/views/compDemo/ssBar'
 import scaleTool from '@/views/compDemo/scaleTool/scaleTool'
 import pretext from '@/views/compDemo/pretext'
+import boneyard from '@/views/compDemo/boneyard'
 import drClick from '@/views/directiveDemo/drClick'
 import drag from '@/views/directiveDemo/drag'
 import scrollActiveItem from '@/views/directiveDemo/scrollActiveItem'
@@ -89,6 +90,11 @@ const routes = [
     path: '/pretext',
     name: 'pretext',
     component: pretext
+  },
+  {
+    path: '/boneyard',
+    name: 'boneyard',
+    component: boneyard
   },
   // 指令
   { 

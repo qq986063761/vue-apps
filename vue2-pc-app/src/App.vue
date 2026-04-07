@@ -90,6 +90,10 @@
               {
                 path: '/pretext',
                 label: 'Pretext 文本布局',
+              },
+              {
+                path: '/boneyard',
+                label: 'boneyard-js 骨架屏',
               }
             ]
           },

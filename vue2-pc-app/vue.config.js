@@ -1,6 +1,16 @@
+const path = require('path')
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
-  transpileDependencies: true
+  transpileDependencies: true,
+  configureWebpack: {
+    resolve: {
+      alias: {
+        // boneyard-js 未在 package exports 中暴露 shared/types，供 Vue2 包装组件使用
+        'boneyard-shared': path.resolve(__dirname, 'node_modules/boneyard-js/dist/shared.js'),
+        'boneyard-types': path.resolve(__dirname, 'node_modules/boneyard-js/dist/types.js')
+      }
+    }
+  }
 })
 
 
