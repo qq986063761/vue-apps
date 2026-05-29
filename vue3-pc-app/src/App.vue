@@ -16,6 +16,9 @@ const route = useRoute()
 // 菜单折叠状态
 const isCollapse = ref(false)
 
+// el-scrollbar 组件引用，用于菜单切换时重置滚动位置
+const scrollbarRef = ref(null)
+
 // 菜单数据
 const menuItems = [
   {
@@ -43,6 +46,10 @@ const menuItems = [
 // 处理菜单点击
 const handleMenuClick = (index: string) => {
   router.push(index)
+  // 菜单切换后重置主内容区滚动位置到顶部
+  if (scrollbarRef.value) {
+    scrollbarRef.value.setScrollTop(0)
+  }
 }
 
 // 切换菜单折叠状态
@@ -79,7 +86,7 @@ const toggleCollapse = () => {
 
   <!-- 右侧内容区域 -->
   <el-container class="app-main">
-    <el-scrollbar class="app-main-view">
+    <el-scrollbar ref="scrollbarRef" class="app-main-view">
       <router-view />
     </el-scrollbar>
   </el-container>

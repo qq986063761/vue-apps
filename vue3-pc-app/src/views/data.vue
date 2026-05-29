@@ -161,10 +161,13 @@ const increment = () => {
   count.value++  // 注意：需要通过 .value 访问和修改
 }
 
+// 随机名字池
+const namePool = ['张三', '李四', '王五', '赵六', '孙七', '周八', '吴九', '郑十', '小明', '小红']
+
 const updateUserInfo = () => {
-  // 修改 ref 对象的属性
-  userInfo.value.name = '李四'
-  userInfo.value.age = 30
+  // 随机选取名字和年龄，每次点击都会变化
+  userInfo.value.name = namePool[Math.floor(Math.random() * namePool.length)]
+  userInfo.value.age = Math.floor(Math.random() * 50) + 18
 }
 
 // ========== reactive API 示例 ==========
