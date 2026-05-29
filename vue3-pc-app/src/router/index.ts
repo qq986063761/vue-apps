@@ -3,6 +3,7 @@ import Data from '../views/data.vue'
 import Component from '../views/component.vue'
 import BuiltinComponents from '../views/builtin-components.vue'
 import StoreDemo from '../views/store-demo.vue'
+import RouterDemo from '../views/router-demo.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/store-demo',
       name: 'StoreDemo',
       component: StoreDemo
+    },
+    {
+      path: '/router-demo',
+      name: 'RouterDemo',
+      component: RouterDemo,
+      meta: { title: 'vue-router 4 API 演示', requireAuth: false }
     }
   ],
 })

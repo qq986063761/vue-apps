@@ -7,7 +7,8 @@ import {
   User,
   Document,
   MagicStick,
-  Shop
+  Shop,
+  Connection
 } from '@element-plus/icons-vue'
 
 const router = useRouter()
@@ -40,6 +41,11 @@ const menuItems = [
     index: '/store-demo',
     title: 'Store 演示',
     icon: Shop
+  },
+  {
+    index: '/router-demo',
+    title: 'vue-router 4 API 演示',
+    icon: Connection
   }
 ]
 
