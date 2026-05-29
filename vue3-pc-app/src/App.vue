@@ -79,7 +79,9 @@ const toggleCollapse = () => {
 
   <!-- 右侧内容区域 -->
   <el-container class="app-main">
-    <router-view class="app-main-view"/>
+    <el-scrollbar class="app-main-view">
+      <router-view />
+    </el-scrollbar>
   </el-container>
 </template>
 
@@ -94,7 +96,6 @@ const toggleCollapse = () => {
   &-view {
     width: 100%;
     height: 100%;
-    overflow: auto;
   }
 }
 

@@ -94,7 +94,7 @@
       <h3>通知消息演示</h3>
       <el-button type="primary" @click="showNotification = true">显示通知</el-button>
 
-      <Teleport to="#notification-container">
+      <Teleport to="body">
         <Transition name="notification">
           <div v-if="showNotification" class="notification">
             <span>这是一条通知消息</span>
@@ -141,6 +141,33 @@
       <p v-color="'red'">这段文字是红色的</p>
       <p v-color="'blue'">这段文字是蓝色的</p>
       <p v-color="'green'">这段文字是绿色的</p>
+    </el-card>
+
+    <!-- v-once / v-memo 性能优化指令 -->
+    <el-card class="demo-card">
+      <template #header>
+        <h2>6. v-once / v-memo — 渲染优化指令</h2>
+      </template>
+
+      <h3>v-once — 只渲染一次，后续不更新</h3>
+      <p>当前时间（动态）: {{ now }}</p>
+      <p v-once>渲染时间（v-once 冻结）: {{ now }}（点击刷新不会变）</p>
+      <el-button type="primary" @click="refreshNow">刷新时间</el-button>
+
+      <el-divider />
+
+      <h3>v-memo — 依赖不变则跳过渲染</h3>
+      <p><strong>仅当 todoList 长度变化时才重新渲染该项统计：</strong></p>
+      <p v-memo="[todoList.length]">
+        待办事项总数: {{ todoList.length }}（仅长度变化时才更新此节点）
+        — 当前时间: {{ now }}
+      </p>
+      <p>当前时间（无 memo）: {{ now }}</p>
+      <el-button type="primary" @click="addTodo">添加待办</el-button>
+      <el-button type="primary" @click="refreshNow">刷新时间</el-button>
+      <ul>
+        <li v-for="item in todoList" :key="item">{{ item }}</li>
+      </ul>
     </el-card>
   </div>
 </template>
@@ -236,6 +263,20 @@ const components = {
   TabA,
   TabB,
   TabC
+}
+
+// ========== v-once / v-memo 演示 ==========
+
+const now = ref(new Date().toLocaleTimeString())
+
+const refreshNow = () => {
+  now.value = new Date().toLocaleTimeString()
+}
+
+const todoList = ref(['学习 Vue 3', '写 Demo', '复习 API'])
+
+const addTodo = () => {
+  todoList.value.push(`待办 ${todoList.value.length + 1}`)
 }
 </script>
 
