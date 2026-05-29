@@ -133,7 +133,7 @@ import ParentComponent from '../components/ParentComponent.vue'
 import LifecycleComponent from '../components/LifecycleComponent.vue'
 import ExposeComponent from '../components/ExposeComponent.vue'
 import ModelComponent from '../components/ModelComponent.vue'
-import { useMouse, useWindowSize } from '../composables/useMouse.js'
+import { useMouse, useWindowSize } from '../composables/useMouse'
 
 // ========== Props 示例 ==========
 const parentMessage = ref('来自父组件的消息')

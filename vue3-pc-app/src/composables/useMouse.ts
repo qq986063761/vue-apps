@@ -2,10 +2,10 @@ import { ref, onMounted, onUnmounted } from 'vue'
 
 // 鼠标位置组合式函数
 export function useMouse() {
-  const x = ref(0)
-  const y = ref(0)
+  const x = ref<number>(0)
+  const y = ref<number>(0)
 
-  const updateMouse = (event) => {
+  const updateMouse = (event: MouseEvent) => {
     x.value = event.pageX
     y.value = event.pageY
   }
@@ -23,8 +23,8 @@ export function useMouse() {
 
 // 窗口大小组合式函数
 export function useWindowSize() {
-  const width = ref(window.innerWidth)
-  const height = ref(window.innerHeight)
+  const width = ref<number>(window.innerWidth)
+  const height = ref<number>(window.innerHeight)
 
   const updateSize = () => {
     width.value = window.innerWidth

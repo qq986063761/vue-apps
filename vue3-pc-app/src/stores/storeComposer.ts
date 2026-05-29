@@ -11,13 +11,13 @@ export function useStoreComposer() {
   const getBaseStore = () => useBaseStore()
   const getChild1Store = () => useChild1Store()
   const getChild2Store = () => useChild2Store()
-  
+
   // 组合数据的方法
   function getCombinedData() {
     const baseStore = getBaseStore()
     const child1Store = getChild1Store()
     const child2Store = getChild2Store()
-    
+
     return {
       base: baseStore.baseInfo,
       child1: child1Store.child1Info,
@@ -32,30 +32,30 @@ export function useStoreComposer() {
       }
     }
   }
-  
+
   // 跨 store 操作的方法
   function syncAllStores() {
     const baseStore = getBaseStore()
     const child1Store = getChild1Store()
     const child2Store = getChild2Store()
-    
+
     // 同步所有计数器的值
     const maxCount = Math.max(baseStore.baseCount, child1Store.child1Count, child2Store.child2Count)
     baseStore.baseCount = maxCount
     child1Store.child1Count = maxCount
     child2Store.child2Count = maxCount
   }
-  
+
   function resetAllStores() {
     const baseStore = getBaseStore()
     const child1Store = getChild1Store()
     const child2Store = getChild2Store()
-    
+
     baseStore.resetBase()
     child1Store.resetChild1()
     child2Store.resetChild2()
   }
-  
+
   return {
     getBaseStore,
     getChild1Store,
