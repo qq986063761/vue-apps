@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
@@ -45,10 +45,10 @@ const router = useRouter()
 const userId = computed(() => Number(route.params.id) || 0)
 
 // ---- onBeforeRouteUpdate：同一组件、参数变化时触发 ----
-let changeCount = $ref(0)
+const changeCount = ref(0)
 
 onBeforeRouteUpdate((to, from) => {
-  changeCount++
+  changeCount.value++
   ElMessage.success(`路由参数变化：${from.params.id} → ${to.params.id}`)
 })
 
