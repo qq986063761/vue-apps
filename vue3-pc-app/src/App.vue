@@ -93,7 +93,11 @@ const toggleCollapse = () => {
   <!-- 右侧内容区域 -->
   <el-container class="app-main">
     <el-scrollbar ref="scrollbarRef" class="app-main-view">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" />
+        </keep-alive>
+      </router-view>
     </el-scrollbar>
   </el-container>
 </template>
