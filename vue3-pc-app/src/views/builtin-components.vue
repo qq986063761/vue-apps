@@ -4,139 +4,144 @@
     <p>这个页面演示了 Vue 3 的各种内置组件和特性</p>
 
     <!-- Transition 组件演示 -->
-    <div class="demo-section">
-      <h2>1. Transition 组件 - 过渡动画</h2>
-      <div class="demo-item">
-        <h3>基础过渡效果</h3>
-        <button @click="showBasic = !showBasic">切换显示</button>
-        <Transition name="fade">
-          <div v-if="showBasic" class="transition-box">
-            这是一个淡入淡出的过渡效果
-          </div>
-        </Transition>
-      </div>
+    <el-card class="demo-card">
+      <template #header>
+        <h2>1. Transition 组件 — 过渡动画</h2>
+      </template>
 
-      <div class="demo-item">
-        <h3>滑动过渡效果</h3>
-        <button @click="showSlide = !showSlide">切换显示</button>
-        <Transition name="slide">
-          <div v-if="showSlide" class="transition-box">
-            这是一个滑动过渡效果
-          </div>
-        </Transition>
-      </div>
-
-      <div class="demo-item">
-        <h3>列表过渡效果</h3>
-        <div class="list-controls">
-          <button @click="addItem">添加项目</button>
-          <button @click="removeItem">删除项目</button>
-          <button @click="shuffleList">打乱顺序</button>
+      <h3>基础过渡效果</h3>
+      <el-button type="primary" @click="showBasic = !showBasic">切换显示</el-button>
+      <Transition name="fade">
+        <div v-if="showBasic" class="transition-box">
+          这是一个淡入淡出的过渡效果
         </div>
-        <TransitionGroup name="list" tag="div" class="list-container">
-          <div v-for="item in listItems" :key="item.id" class="list-item">
-            {{ item.text }}
-          </div>
-        </TransitionGroup>
+      </Transition>
+
+      <el-divider />
+
+      <h3>滑动过渡效果</h3>
+      <el-button type="primary" @click="showSlide = !showSlide">切换显示</el-button>
+      <Transition name="slide">
+        <div v-if="showSlide" class="transition-box">
+          这是一个滑动过渡效果
+        </div>
+      </Transition>
+
+      <el-divider />
+
+      <h3>列表过渡效果</h3>
+      <div class="list-controls">
+        <el-button type="primary" @click="addItem">添加项目</el-button>
+        <el-button type="primary" @click="removeItem">删除项目</el-button>
+        <el-button type="primary" @click="shuffleList">打乱顺序</el-button>
       </div>
-    </div>
+      <TransitionGroup name="list" tag="div" class="list-container">
+        <div v-for="item in listItems" :key="item.id" class="list-item">
+          {{ item.text }}
+        </div>
+      </TransitionGroup>
+    </el-card>
 
     <!-- KeepAlive 组件演示 -->
-    <div class="demo-section">
-      <h2>2. KeepAlive 组件 - 缓存组件</h2>
-      <div class="demo-item">
-        <h3>组件缓存演示</h3>
-        <p>切换组件时，KeepAlive 会保持组件的状态</p>
-        <div class="tab-container">
-          <div class="tab-buttons">
-            <button 
-              v-for="tab in tabs" 
-              :key="tab.name"
-              :class="{ active: currentTab === tab.name }"
-              @click="currentTab = tab.name"
-            >
-              {{ tab.label }}
-            </button>
-          </div>
-          <div class="tab-content">
-            <KeepAlive>
-              <component :is="components[currentTab]" />
-            </KeepAlive>
-          </div>
+    <el-card class="demo-card">
+      <template #header>
+        <h2>2. KeepAlive 组件 — 缓存组件</h2>
+      </template>
+
+      <h3>组件缓存演示</h3>
+      <p>切换组件时，KeepAlive 会保持组件的状态</p>
+      <div class="tab-container">
+        <div class="tab-buttons">
+          <button
+            v-for="tab in tabs"
+            :key="tab.name"
+            :class="{ active: currentTab === tab.name }"
+            @click="currentTab = tab.name"
+          >
+            {{ tab.label }}
+          </button>
+        </div>
+        <div class="tab-content">
+          <KeepAlive>
+            <component :is="components[currentTab]" />
+          </KeepAlive>
         </div>
       </div>
-    </div>
+    </el-card>
 
     <!-- Teleport 组件演示 -->
-    <div class="demo-section">
-      <h2>3. Teleport 组件 - 传送门</h2>
-      <div class="demo-item">
-        <h3>模态框演示</h3>
-        <button @click="showModal = true">打开模态框</button>
-        <p>模态框会被传送到 body 元素中</p>
-        
-        <Teleport to="body">
-          <div v-if="showModal" class="modal-overlay" @click="showModal = false">
-            <div class="modal-content" @click.stop>
-              <h3>这是一个模态框</h3>
-              <p>这个模态框通过 Teleport 被传送到 body 元素中</p>
-              <button @click="showModal = false">关闭</button>
-            </div>
-          </div>
-        </Teleport>
-      </div>
+    <el-card class="demo-card">
+      <template #header>
+        <h2>3. Teleport 组件 — 传送门</h2>
+      </template>
 
-      <div class="demo-item">
-        <h3>通知消息演示</h3>
-        <button @click="showNotification = true">显示通知</button>
-        
-        <Teleport to="#notification-container">
-          <Transition name="notification">
-            <div v-if="showNotification" class="notification">
-              <span>这是一条通知消息</span>
-              <button @click="showNotification = false">×</button>
-            </div>
-          </Transition>
-        </Teleport>
-      </div>
-    </div>
+      <h3>模态框演示</h3>
+      <el-button type="primary" @click="showModal = true">打开模态框</el-button>
+      <p>模态框会被传送到 body 元素中</p>
+
+      <Teleport to="body">
+        <div v-if="showModal" class="modal-overlay" @click="showModal = false">
+          <div class="modal-content" @click.stop>
+            <h3>这是一个模态框</h3>
+            <p>这个模态框通过 Teleport 被传送到 body 元素中</p>
+            <el-button type="primary" @click="showModal = false">关闭</el-button>
+          </div>
+        </div>
+      </Teleport>
+
+      <el-divider />
+
+      <h3>通知消息演示</h3>
+      <el-button type="primary" @click="showNotification = true">显示通知</el-button>
+
+      <Teleport to="#notification-container">
+        <Transition name="notification">
+          <div v-if="showNotification" class="notification">
+            <span>这是一条通知消息</span>
+            <el-button type="primary" @click="showNotification = false">×</el-button>
+          </div>
+        </Transition>
+      </Teleport>
+    </el-card>
 
     <!-- Suspense 组件演示 -->
-    <div class="demo-section">
-      <h2>4. Suspense 组件 - 异步组件</h2>
-      <div class="demo-item">
-        <h3>异步组件加载</h3>
-        <button @click="loadAsyncComponent">加载异步组件</button>
-        <button @click="showAsync = false">隐藏组件</button>
-        
-        <div v-if="showAsync" class="async-container">
-          <Suspense>
-            <template #default>
-              <AsyncComponentWrapper />
-            </template>
-            <template #fallback>
-              <div class="loading">正在加载异步组件...</div>
-            </template>
-          </Suspense>
-        </div>
+    <el-card class="demo-card">
+      <template #header>
+        <h2>4. Suspense 组件 — 异步组件</h2>
+      </template>
+
+      <h3>异步组件加载</h3>
+      <el-button type="primary" @click="loadAsyncComponent">加载异步组件</el-button>
+      <el-button type="primary" @click="showAsync = false">隐藏组件</el-button>
+
+      <div v-if="showAsync" class="async-container">
+        <Suspense>
+          <template #default>
+            <AsyncComponentWrapper />
+          </template>
+          <template #fallback>
+            <div class="loading">正在加载异步组件...</div>
+          </template>
+        </Suspense>
       </div>
-    </div>
+    </el-card>
 
     <!-- 自定义指令演示 -->
-    <div class="demo-section">
-      <h2>5. 自定义指令</h2>
-      <div class="demo-item">
-        <h3>v-focus 指令</h3>
-        <input v-focus placeholder="这个输入框会自动获得焦点" />
-      </div>
-      
-      <div class="demo-item">
-        <h3>v-color 指令</h3>
-        <p v-color="'red'">这段文字是红色的</p>
-        <p v-color="'blue'">这段文字是蓝色的</p>
-        <p v-color="'green'">这段文字是绿色的</p>
-      </div>
-    </div>
+    <el-card class="demo-card">
+      <template #header>
+        <h2>5. 自定义指令</h2>
+      </template>
+
+      <h3>v-focus 指令</h3>
+      <input v-focus placeholder="这个输入框会自动获得焦点" />
+
+      <el-divider />
+
+      <h3>v-color 指令</h3>
+      <p v-color="'red'">这段文字是红色的</p>
+      <p v-color="'blue'">这段文字是蓝色的</p>
+      <p v-color="'green'">这段文字是绿色的</p>
+    </el-card>
   </div>
 </template>
 
@@ -241,20 +246,14 @@ const components = {
   margin: 0 auto;
 }
 
-.demo-section {
-  margin-bottom: 40px;
-  padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
+.demo-card {
+  margin-bottom: 24px;
 
-.demo-item {
-  margin-bottom: 30px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 6px;
-  border-left: 4px solid #409eff;
+  h2 {
+    margin: 0;
+    color: #409eff;
+    font-size: 18px;
+  }
 
   h3 {
     color: #2c3e50;
@@ -366,7 +365,6 @@ const components = {
   min-height: 200px;
 }
 
-
 /* Teleport 样式 */
 .modal-overlay {
   position: fixed;
@@ -429,42 +427,13 @@ const components = {
   font-style: italic;
 }
 
-.async-component {
-  padding: 20px;
-  background-color: #f0f9ff;
-  border-radius: 4px;
-  border-left: 4px solid #409eff;
-}
-
-/* 按钮样式 */
-button {
-  margin: 5px;
-  padding: 8px 16px;
-  background-color: #409eff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-
-  &:hover {
-    background-color: #337ecc;
-  }
-}
-
-.list-controls button {
-  margin-right: 10px;
-}
-
 h1 {
   color: #409eff;
   text-align: center;
   margin-bottom: 20px;
 }
 
-h2 {
-  color: #409eff;
-  border-bottom: 2px solid #409eff;
-  padding-bottom: 10px;
+p {
+  margin: 10px 0;
 }
 </style>
