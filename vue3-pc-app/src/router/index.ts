@@ -4,6 +4,9 @@ import Component from '../views/component.vue'
 import BuiltinComponents from '../views/builtin-components.vue'
 import StoreDemo from '../views/store-demo.vue'
 import RouterDemo from '../views/router-demo.vue'
+import RouterDemoIndex from '../views/router-demo-index.vue'
+import RouterDemoUser from '../views/router-demo-user.vue'
+import RouterDemoSearch from '../views/router-demo-search.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,9 +37,25 @@ const router = createRouter({
     },
     {
       path: '/router-demo',
-      name: 'RouterDemo',
       component: RouterDemo,
-      meta: { title: 'vue-router 4 API 演示', requireAuth: false }
+      meta: { title: 'vue-router 4 API 演示', requireAuth: false },
+      children: [
+        {
+          path: '',
+          name: 'RouterDemoIndex',
+          component: RouterDemoIndex
+        },
+        {
+          path: 'user/:id',
+          name: 'RouterDemoUser',
+          component: RouterDemoUser
+        },
+        {
+          path: 'search',
+          name: 'RouterDemoSearch',
+          component: RouterDemoSearch
+        }
+      ]
     }
   ],
 })

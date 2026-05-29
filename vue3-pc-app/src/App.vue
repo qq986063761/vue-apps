@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import {
   DataAnalysis,
@@ -62,6 +62,12 @@ const handleMenuClick = (index: string) => {
 const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value
 }
+
+// 根据当前路径计算需要高亮的菜单项 index（支持嵌套路由）
+const activeMenu = computed(() => {
+  const matched = menuItems.find(item => route.path.startsWith(item.index))
+  return matched?.index ?? route.path
+})
 </script>
 
 <template>
@@ -73,7 +79,7 @@ const toggleCollapse = () => {
     </div>
 
     <el-menu
-      :default-active="route.path"
+      :default-active="activeMenu"
       :collapse="isCollapse"
       :unique-opened="true"
       class="sidebar-menu"
