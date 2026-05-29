@@ -252,6 +252,7 @@ const countRef = toRef(originObj, 'count')
 
 // toRefs — 批量转为 ref
 const { name: nameRef, age: ageRef } = toRefs(originObj)
+console.log('toRefs', { nameRef, ageRef })
 
 const updateOriginObject = () => {
   originObj.count += 10
