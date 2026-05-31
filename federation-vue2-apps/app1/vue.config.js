@@ -11,15 +11,13 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: {
-    // target: ["web", "es5"],
-    // output: {
-    //   environment: {
-    //     asyncFunction: false
-    //   }
+    // optimization: {
+    //   splitChunks: false // 必须，不然 main 引入报错
     // },
     plugins: [
       new ModuleFederationPlugin({
         name: 'app1',
+        // library: { type: 'window', name: 'app1' },
         filename: 'remoteEntry.js',
         exposes: {
           './index': './src/exports/index.ts'
