@@ -17,7 +17,8 @@ module.exports = defineConfig({
         shared: {
           vue: { singleton: true, eager: true, requiredVersion: '^2.6.14' },
           'vue-router': { singleton: true, eager: true, requiredVersion: '^3.5.1' },
-          vuex: { singleton: true, eager: true, requiredVersion: '^3.6.2' }
+          vuex: { singleton: true, eager: true, requiredVersion: '^3.6.2' },
+          'element-ui': { singleton: true, eager: true, requiredVersion: '^2.15.14' }
         }
       })
     ]

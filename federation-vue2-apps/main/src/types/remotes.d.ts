@@ -2,7 +2,6 @@ import { RouteConfig } from 'vue-router'
 import { AxiosInstance } from 'axios'
 
 // ============ 子应用 Store 模块配置 ============
-// 使用宽松定义以兼容运行时的动态注册
 export interface StoreModuleConfig {
   namespace: string
   module: {
@@ -27,33 +26,24 @@ export interface SubAppConfig {
   routes: Array<RouteConfig>
 }
 
+// ============ 子应用统一入口类型 ============
+export interface SubAppExports {
+  routes: RouteConfig[]
+  store: StoreModuleConfig['module']
+  ajax: AxiosInstance
+}
+
 // ============ 远程模块类型声明 ============
-declare module 'app1/routes' {
+declare module 'app1/index' {
   const routes: RouteConfig[]
-  export default routes
-}
-
-declare module 'app1/store' {
-  const storeModule: StoreModuleConfig['module']
-  export default storeModule
-}
-
-declare module 'app1/ajax' {
+  const store: StoreModuleConfig['module']
   const ajax: AxiosInstance
-  export default ajax
+  export { routes, store, ajax }
 }
 
-declare module 'app2/routes' {
+declare module 'app2/index' {
   const routes: RouteConfig[]
-  export default routes
-}
-
-declare module 'app2/store' {
-  const storeModule: StoreModuleConfig['module']
-  export default storeModule
-}
-
-declare module 'app2/ajax' {
+  const store: StoreModuleConfig['module']
   const ajax: AxiosInstance
-  export default ajax
+  export { routes, store, ajax }
 }
