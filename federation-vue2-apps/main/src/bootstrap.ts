@@ -9,47 +9,68 @@ import { registerSubAppRoutes } from './router'
 import { registerSubAppStores } from './store'
 import { registerSubAppAjax } from './ajax'
 import REMOTE_CONFIG from './config/remotes'
-import { loadRemote } from './utils/loadRemote'
 import type { SubAppConfig, StoreModuleConfig, AjaxConfig } from './types/remotes'
 
 Vue.use(ElementUI)
 
 /**
+ * 各子应用的 import() 加载器映射
+ * webpack 在构建时看到这些静态字符串，通过 remotes 配置中的 promise 动态加载
+ */
+const remoteLoaders: Record<string, () => Promise<any>> = {
+  app1: () => import('app1/index'),
+  app2: () => import('app2/index'),
+}
+
+/**
  * 主应用启动入口
- * 运行时动态加载远程模块，URL 集中配置在 src/config/remotes.ts
  *
  * 流程：
- * 1. 遍历 REMOTE_CONFIG，运行时注入 <script> 并调用 MF 容器 API
+ * 1. 遍历 REMOTE_CONFIG，通过 import('appX/index') 动态加载远程模块
  * 2. 在 main Router 上注册子应用路由（自动加 /app1 /app2 前缀）
  * 3. 在 main Vuex Store 上注册子应用 store 模块（namespaced）
  * 4. 注册子应用 ajax 实例（独立拦截器）
  * 5. 挂载 Vue 根实例
  */
 async function bootstrap(): Promise<void> {
-  // 运行时动态加载所有子应用模块
-  const remoteModules = await Promise.all(
-    REMOTE_CONFIG.map(entry => loadRemote(entry))
-  )
-
   const subAppConfigs: SubAppConfig[] = []
   const storeModules: StoreModuleConfig[] = []
   const ajaxConfigs: AjaxConfig[] = []
 
-  REMOTE_CONFIG.forEach((entry, i) => {
-    const mod = remoteModules[i]
-    if (!mod) return
+  // 并行加载所有子应用远程模块
+  const results = await Promise.all(
+    REMOTE_CONFIG.map(async (entry) => {
+      const loader = remoteLoaders[entry.name]
+      if (!loader) {
+        console.warn(`[main] 未知的子应用: ${entry.name}，请在 remoteLoaders 中注册`)
+        return null
+      }
+      try {
+        const mod = await loader()
+        console.log(`[main] 子应用 ${entry.name} 远程模块加载成功: ${entry.url}`)
+        return { name: entry.name, module: mod }
+      } catch (err) {
+        console.warn(`[main] 加载子应用 ${entry.name} 失败，请确认 ${entry.url} 已启动:`, err)
+        return null
+      }
+    })
+  )
 
-    // 路由 → /app1 /app2
+  results.forEach((result) => {
+    if (!result) return
+    const { name, module: mod } = result
+
+    // 路由 → /app1 /app2 前缀
     if (mod.routes) {
-      subAppConfigs.push({ prefix: `/${entry.name}`, routes: mod.routes })
+      subAppConfigs.push({ prefix: `/${name}`, routes: mod.routes })
     }
-    // Store 模块 → namespaced: app1 / app2
+    // Store → namespaced 模块
     if (mod.store) {
-      storeModules.push({ namespace: entry.name, module: mod.store })
+      storeModules.push({ namespace: name, module: mod.store })
     }
-    // Ajax 实例 → 独立拦截器
+    // Ajax → 独立 axios 实例
     if (mod.ajax) {
-      ajaxConfigs.push({ name: entry.name, ajax: mod.ajax })
+      ajaxConfigs.push({ name, ajax: mod.ajax })
     }
   })
 
@@ -61,7 +82,7 @@ async function bootstrap(): Promise<void> {
   new Vue({
     router,
     store,
-    render: h => h(App)
+    render: (h) => h(App)
   }).$mount('#app')
 }
 

@@ -3,6 +3,7 @@ const { ModuleFederationPlugin } = require('webpack').container
 
 module.exports = defineConfig({
   transpileDependencies: true,
+  publicPath: 'auto',
   devServer: {
     port: 8081,
     headers: {
@@ -10,9 +11,13 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: {
+    output: {
+      uniqueName: 'app1'
+    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'app1',
+        library: { type: 'var', name: 'app1' },
         filename: 'remoteEntry.js',
         exposes: {
           './index': './src/exports/index.ts'
