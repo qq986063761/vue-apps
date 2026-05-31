@@ -33,7 +33,8 @@ export function registerSubAppStores(configs: StoreModuleConfig[]): void {
       console.warn(`[main] 子应用 store 模块 ${namespace} 未设置 namespaced: true，已自动设置`)
       module.namespaced = true
     }
-    store.registerModule(namespace, module)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    store.registerModule(namespace, module as any)
     console.log(`[main] 子应用 Store 模块已注册: ${namespace}`)
   })
 }

@@ -33,17 +33,5 @@ export interface SubAppExports {
   ajax: AxiosInstance
 }
 
-// ============ 远程模块类型声明 ============
-declare module 'app1/index' {
-  const routes: RouteConfig[]
-  const store: StoreModuleConfig['module']
-  const ajax: AxiosInstance
-  export { routes, store, ajax }
-}
-
-declare module 'app2/index' {
-  const routes: RouteConfig[]
-  const store: StoreModuleConfig['module']
-  const ajax: AxiosInstance
-  export { routes, store, ajax }
-}
+// ⚠️ app1/index / app2/index 的 ambient module 声明在 remote-modules.d.ts
+// 该文件无顶层 import，确保 declare module 被 TS 视为全新模块声明而非 augmentation
