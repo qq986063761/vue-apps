@@ -11,11 +11,6 @@ const mainRoutes: Array<RouteConfig> = [
     path: '/',
     name: 'main-home',
     component: HomeView
-  },
-  {
-    path: '/about',
-    name: 'main-about',
-    component: () => import(/* webpackChunkName: "main-about" */ '../views/AboutView.vue')
   }
 ]
 
