@@ -10,10 +10,7 @@ module.exports = defineConfig({
     plugins: [
       new ModuleFederationPlugin({
         name: 'main',
-        remotes: {
-          app1: 'app1@http://localhost:8081/remoteEntry.js',
-          app2: 'app2@http://localhost:8082/remoteEntry.js'
-        },
+        // 不在构建时绑定远程地址 —— 运行时由 loadRemote() 动态加载
         shared: {
           vue: { singleton: true, eager: true, requiredVersion: '^2.6.14' },
           'vue-router': { singleton: true, eager: true, requiredVersion: '^3.5.1' },
