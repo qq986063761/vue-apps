@@ -2,60 +2,35 @@ const { defineConfig } = require('@vue/cli-service')
 const { ModuleFederationPlugin } = require('webpack').container
 
 /**
- * 生成 promise-based 动态 remote 表达式
- * webpack 在构建时将这段字符串直接嵌入 runtime，
- * URL 在运行时从 window.__REMOTE_URLS__ 读取，彻底解耦构建和部署
+ * 子应用 remoteEntry.js 地址
+ * 可通过环境变量覆盖：
+ *   cross-env APP1_URL=http://prod:8081 APP2_URL=http://prod:8082 npm run build
  */
-function dynamicRemote(name, fallbackUrl) {
-  return `promise new Promise((resolve, reject) => {
-    var urls = window.__REMOTE_URLS__ || {};
-    var url = urls['${name}'] || '${fallbackUrl}';
-    var script = document.createElement('script');
-    script.src = url + '/remoteEntry.js';
-    script.onload = function() {
-      var container = window['${name}'];
-      if (!container) {
-        reject(new Error('[main] 远程容器 ${name} 未在 window 上注册，请确认 ' + url + ' 可访问'));
-        return;
-      }
-      var proxy = {
-        get: function(request) { return container.get(request); },
-        init: function(arg) {
-          try { return container.init(arg); } catch(e) { return Promise.resolve(); }
-        }
-      };
-      resolve(proxy);
-    };
-    script.onerror = function() {
-      reject(new Error('[main] 加载 ${name} remoteEntry.js 失败: ' + url));
-    };
-    document.head.appendChild(script);
-  })`
-}
+const APP1_URL = process.env.APP1_URL || 'http://localhost:8081'
+const APP2_URL = process.env.APP2_URL || 'http://localhost:8082'
 
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: 'auto',
+  publicPath: '/',
   devServer: {
     port: 8080
   },
   configureWebpack: {
-    output: {
-      uniqueName: 'main'
-    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'main',
-        // ===== 运行时动态 remote —— URL 在 main.ts 里注入 window.__REMOTE_URLS__ =====
+        // ===== 标准 MF remote URL 格式 =====
+        // webpack 自行负责脚本注入、容器初始化、shared scope 协商
+        // import('app1/index') 原生可用
         remotes: {
-          app1: dynamicRemote('app1', 'http://localhost:8081'),
-          app2: dynamicRemote('app2', 'http://localhost:8082'),
+          app1: `app1@${APP1_URL}/remoteEntry.js`,
+          app2: `app2@${APP2_URL}/remoteEntry.js`,
         },
         shared: {
-          vue: { singleton: true, eager: true, requiredVersion: '^2.6.14' },
-          'vue-router': { singleton: true, eager: true, requiredVersion: '^3.5.1' },
-          vuex: { singleton: true, eager: true, requiredVersion: '^3.6.2' },
-          'element-ui': { singleton: true, eager: true, requiredVersion: '^2.15.14' }
+          vue: { singleton: true, requiredVersion: '^2.6.14' },
+          'vue-router': { singleton: true, requiredVersion: '^3.5.1' },
+          vuex: { singleton: true, requiredVersion: '^3.6.2' },
+          'element-ui': { singleton: true, requiredVersion: '^2.15.14' }
         }
       })
     ]

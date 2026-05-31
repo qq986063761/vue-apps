@@ -3,7 +3,7 @@ const { ModuleFederationPlugin } = require('webpack').container
 
 module.exports = defineConfig({
   transpileDependencies: true,
-  publicPath: 'auto',
+  publicPath: '/',
   devServer: {
     port: 8082,
     headers: {
@@ -11,13 +11,15 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: {
-    output: {
-      uniqueName: 'app2'
-    },
+    // target: ["web", "es5"],
+    // output: {
+    //   environment: {
+    //     asyncFunction: false
+    //   }
+    // },
     plugins: [
       new ModuleFederationPlugin({
         name: 'app2',
-        library: { type: 'var', name: 'app2' },
         filename: 'remoteEntry.js',
         exposes: {
           './index': './src/exports/index.ts'
