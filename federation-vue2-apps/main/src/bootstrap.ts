@@ -33,6 +33,7 @@ const REMOTE_CONFIGS = [
 ]
 
 async function bootstrap(): Promise<void> {
+  console.log('bootstrap before')
   const subAppConfigs: SubAppConfig[] = []
   const storeModules: StoreModuleConfig[] = []
   const ajaxConfigs: AjaxConfig[] = []
@@ -50,6 +51,7 @@ async function bootstrap(): Promise<void> {
     })
   )
 
+  console.log('bootstrap results', results)
   results.forEach((result) => {
     if (!result) return
     const { name, module: mod } = result
@@ -63,6 +65,7 @@ async function bootstrap(): Promise<void> {
   registerSubAppStores(storeModules)
   registerSubAppAjax(ajaxConfigs)
 
+  console.log('bootstrap after')
   new Vue({ router, store, render: (h) => h(App) }).$mount('#app')
 }
 
