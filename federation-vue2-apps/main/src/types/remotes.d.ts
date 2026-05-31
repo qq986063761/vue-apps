@@ -33,5 +33,11 @@ export interface SubAppExports {
   ajax: AxiosInstance
 }
 
-// ⚠️ app1/index / app2/index 的 ambient module 声明在 remote-modules.d.ts
-// 该文件无顶层 import，确保 declare module 被 TS 视为全新模块声明而非 augmentation
+// ============ loadRemote 远程加载工具的类型 ============
+// 见 src/utils/loadRemote.ts
+export interface RemoteConfig {
+  name: string
+  url: string
+  scope: string
+  module: string
+}
