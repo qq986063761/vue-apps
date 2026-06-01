@@ -11,9 +11,9 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: {
-    // optimization: {
-    //   splitChunks: false // 必须，不然 main 引入报错
-    // },
+    optimization: {
+      splitChunks: false // remoteEntry 必须同步导出容器，不能依赖 chunk-vendors/chunk-common
+    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'app1',
