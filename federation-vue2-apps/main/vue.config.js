@@ -1,6 +1,11 @@
 const { defineConfig } = require('@vue/cli-service')
 const { ModuleFederationPlugin } = require('webpack').container
 
+function getRemoteEntry(envName, fallbackBaseUrl) {
+  const value = process.env[envName] || fallbackBaseUrl
+  return value.endsWith('remoteEntry.js') ? value : `${value.replace(/\/$/, '')}/remoteEntry.js`
+}
+
 module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: '/',
@@ -11,8 +16,10 @@ module.exports = defineConfig({
     plugins: [
       new ModuleFederationPlugin({
         name: 'main',
-        // 不在 webpack 配置中声明 remotes，改为运行时动态加载
-        // 避免 webpack 在 shared scope 初始化时强制加载所有 remote 容器
+        remotes: {
+          app1: `app1@${getRemoteEntry('VUE_APP_APP1_URL', 'http://localhost:8081')}`,
+          app2: `app2@${getRemoteEntry('VUE_APP_APP2_URL', 'http://localhost:8082')}`
+        },
         shared: {
           vue: { singleton: true, requiredVersion: '^2.6.14' },
           'vue-router': { singleton: true, requiredVersion: '^3.5.1' },

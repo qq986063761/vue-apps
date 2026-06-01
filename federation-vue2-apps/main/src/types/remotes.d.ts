@@ -32,12 +32,3 @@ export interface SubAppExports {
   store: StoreModuleConfig['module']
   ajax: AxiosInstance
 }
-
-// ============ loadRemote 远程加载工具的类型 ============
-// 见 src/utils/loadRemote.ts
-export interface RemoteConfig {
-  name: string
-  url: string
-  scope: string
-  module: string
-}

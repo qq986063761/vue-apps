@@ -11,13 +11,9 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: {
-    optimization: {
-      splitChunks: false // remoteEntry 必须同步导出容器，不能依赖 chunk-vendors/chunk-common
-    },
     plugins: [
       new ModuleFederationPlugin({
         name: 'app1',
-        library: { type: 'window', name: 'app1' },
         filename: 'remoteEntry.js',
         exposes: {
           './index': './src/exports/index.ts'
