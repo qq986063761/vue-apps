@@ -37,6 +37,8 @@ export function registerSubAppStores(configs: StoreModuleConfig[]): void {
     store.registerModule(namespace, module as any)
     console.log(`[main] 子应用 Store 模块已注册: ${namespace}`)
   })
+
+  console.log('[main] 当前所有 Store 模块:', store)
 }
 
 export default store

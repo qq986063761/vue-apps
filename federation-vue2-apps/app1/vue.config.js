@@ -11,9 +11,11 @@ module.exports = defineConfig({
     }
   },
   configureWebpack: {
-    optimization: {
-      splitChunks: false // 必须，不然 main 引入报错
-    },
+    ...(process.env.NODE_ENV === 'development' && {
+      optimization: {
+        splitChunks: false // 必须，不然 main 引入报错
+      } || {}
+    }),
     plugins: [
       new ModuleFederationPlugin({
         name: 'app1',

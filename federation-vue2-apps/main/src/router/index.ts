@@ -51,6 +51,8 @@ export function registerSubAppRoutes(configs: SubAppConfig[]): void {
     })
     console.log(`[main] 子应用路由已注册: ${prefix} (${prefixedRoutes.length} 条路由)`)
   })
+
+  console.log('[main] 当前所有路由:', router.getRoutes())
 }
 
 export default router

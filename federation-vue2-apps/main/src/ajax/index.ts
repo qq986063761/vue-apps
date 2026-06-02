@@ -50,6 +50,8 @@ export function registerSubAppAjax(configs: AjaxConfig[]): void {
     subAppAjaxMap[name] = ajax
     console.log(`[main] 子应用 ${name} 的 ajax 实例已注册`)
   })
+
+  console.log('[main] 当前注册的子应用 ajax 实例:', subAppAjaxMap)
 }
 
 /**
