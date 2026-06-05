@@ -5,7 +5,7 @@ module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: 'auto',
   devServer: {
-    port: 8081,
+    port: process.env.VUE_APP_PORT,
     headers: {
       'Access-Control-Allow-Origin': '*'
     }

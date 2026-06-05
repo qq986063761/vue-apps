@@ -14,15 +14,15 @@ module.exports = defineConfig({
   transpileDependencies: true,
   publicPath: './',
   devServer: {
-    port: 8080
+    port: process.env.VUE_APP_PORT
   },
   configureWebpack: {
     plugins: [
       new ModuleFederationPlugin({
         name: 'main',
         remotes: {
-          app1: getRemoteEntry('app1', 'http://localhost:8081'),
-          app2: getRemoteEntry('app2', 'http://localhost:8082')
+          app1: getRemoteEntry('app1', 'http://localhost:9981'),
+          app2: getRemoteEntry('app2', 'http://localhost:9982')
         },
         shared: {
           vue: { singleton: true, requiredVersion: '^2.6.14' },
