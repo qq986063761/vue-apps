@@ -5,14 +5,25 @@
     <el-card shadow="hover" class="mb-4">
       <div slot="header" class="font-semibold">app1 Store 状态</div>
       <p class="text-sm text-gray-600">
-        appName: <span class="font-mono text-blue-600">{{ $store.state.app1?.appName || '未加载' }}</span>
+        appName: <span class="font-mono text-blue-600">{{ appName || '未加载' }}</span>
       </p>
       <p class="text-sm text-gray-600 mt-1">
-        count: <span class="font-mono text-blue-600">{{ $store.state.app1?.count ?? 0 }}</span>
+        count: <span class="font-mono text-blue-600">{{ count }}</span>
       </p>
-      <el-button type="primary" size="mini" class="mt-3" @click="$store.commit('app1/increment')">
-        count +1
-      </el-button>
+      <p class="text-sm text-gray-600 mt-1">
+        doubleCount: <span class="font-mono text-blue-600">{{ doubleCount }}</span>
+      </p>
+      <div class="mt-3">
+        <el-button type="primary" size="mini" @click="increment">
+          count +1
+        </el-button>
+        <el-button type="primary" plain size="mini" @click="setCount(10)">
+          setCount(10)
+        </el-button>
+        <el-button type="primary" plain size="mini" @click="incrementAsync">
+          async +1
+        </el-button>
+      </div>
     </el-card>
     <router-link to="/app1/about" class="text-blue-500 hover:underline">→ 进入 app1 关于页</router-link>
   </div>
@@ -20,7 +31,24 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
 
-@Component
-export default class HomeView extends Vue {}
+@Component({
+  computed: {
+    ...mapState('app1', ['appName', 'count']),
+    ...mapGetters('app1', ['doubleCount'])
+  },
+  methods: {
+    ...mapMutations('app1', ['increment', 'setCount']),
+    ...mapActions('app1', ['incrementAsync'])
+  }
+})
+export default class HomeView extends Vue {
+  appName!: string
+  count!: number
+  doubleCount!: number
+  increment!: () => void
+  setCount!: (payload: number) => void
+  incrementAsync!: () => void
+}
 </script>
