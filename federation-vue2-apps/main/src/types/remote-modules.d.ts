@@ -19,7 +19,7 @@ declare module 'app1/index' {
     mutations?: Record<string, (...args: unknown[]) => void>
     actions?: Record<string, (...args: unknown[]) => unknown>
   }
-  const ajax: import('axios').AxiosInstance
+  const ajax: import('./remotes').SubAppAjaxFactory
   export { routes, store, ajax }
 }
 
@@ -33,6 +33,6 @@ declare module 'app2/index' {
     mutations?: Record<string, (...args: unknown[]) => void>
     actions?: Record<string, (...args: unknown[]) => unknown>
   }
-  const ajax: import('axios').AxiosInstance
+  const ajax: import('./remotes').SubAppAjaxFactory
   export { routes, store, ajax }
 }

@@ -15,9 +15,22 @@ export interface StoreModuleConfig {
 }
 
 // ============ 子应用 Ajax 配置 ============
+export interface SubAppAjaxFactoryOptions {
+  ajax: AxiosInstance
+  path: string
+}
+
+export interface SubAppAjaxModule {
+  apiList: Record<string, string>
+  ajaxList: Record<string, (...args: unknown[]) => Promise<unknown>>
+}
+
+export type SubAppAjaxFactory = (options: SubAppAjaxFactoryOptions) => SubAppAjaxModule
+
 export interface AjaxConfig {
   name: string
-  ajax: AxiosInstance
+  path?: string
+  ajax: SubAppAjaxFactory
 }
 
 // ============ 子应用配置（路由注册用） ============
@@ -30,5 +43,5 @@ export interface SubAppConfig {
 export interface SubAppExports {
   routes: RouteConfig[]
   store: StoreModuleConfig['module']
-  ajax: AxiosInstance
+  ajax: SubAppAjaxFactory
 }

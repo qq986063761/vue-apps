@@ -1,32 +1,42 @@
-import axios, { AxiosInstance } from 'axios'
+type AjaxMethod = <T = unknown>(url: string, ...args: unknown[]) => Promise<T>
 
-const ajax: AxiosInstance = axios.create({
-  baseURL: process.env.VUE_APP_API_BASE_URL || '/api',
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json'
+interface InjectedAjax {
+  get: AjaxMethod
+  post: AjaxMethod
+  put: AjaxMethod
+  patch: AjaxMethod
+  delete: AjaxMethod
+}
+
+interface CreateAjaxOptions {
+  ajax: InjectedAjax
+  path: string
+}
+
+interface App2AjaxModule {
+  apiList: Record<string, string>
+  ajaxList: {
+    getUsers: (params?: Record<string, unknown>) => Promise<unknown>
   }
-})
+}
 
-// 请求拦截器 —— app2 专属
-ajax.interceptors.request.use(
-  config => {
-    console.log('[app2] request:', config.url)
-    return config
-  },
-  error => Promise.reject(error)
-)
+function createApiPath(path: string, api: string): string {
+  return `${path.replace(/\/$/, '')}/${api.replace(/^\//, '')}`
+}
 
-// 响应拦截器 —— app2 专属
-ajax.interceptors.response.use(
-  response => {
-    console.log('[app2] response:', response.config.url)
-    return response
-  },
-  error => {
-    console.error('[app2] response error:', error.config?.url)
-    return Promise.reject(error)
+function createApp2Ajax({ ajax, path }: CreateAjaxOptions): App2AjaxModule {
+  const apiList = {
+    getUsers: createApiPath(path, '/getUsers')
   }
-)
 
-export default ajax
+  return {
+    apiList,
+    ajaxList: {
+      getUsers(params = {}) {
+        return ajax.post(apiList.getUsers, params)
+      }
+    }
+  }
+}
+
+export default createApp2Ajax

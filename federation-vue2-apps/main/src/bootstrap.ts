@@ -52,7 +52,7 @@ async function bootstrap(): Promise<void> {
 
     if (mod.routes) subAppConfigs.push({ prefix: `/${name}`, routes: mod.routes })
     if (mod.store) storeModules.push({ namespace: name, module: mod.store })
-    if (mod.ajax) ajaxConfigs.push({ name, ajax: mod.ajax })
+    if (mod.ajax) ajaxConfigs.push({ name, path: `/${name}`, ajax: mod.ajax })
   })
 
   registerSubAppRoutes(subAppConfigs)
