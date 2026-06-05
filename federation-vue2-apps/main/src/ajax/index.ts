@@ -85,7 +85,7 @@ function createGlobalAjax(): GlobalAjaxMap {
  * - 主应用：this.$ajax.getUsers(...)
  * - 子应用：this.$ajax.app1.getUsers(...) / this.$ajax.app2.getUsers(...)
  */
-function installGlobalAjax(): void {
+export function installGlobalAjax(): void {
   const globalAjax = createGlobalAjax()
   const vuePrototype = Vue.prototype as Vue & { $ajax: GlobalAjaxMap }
   vuePrototype.$ajax = globalAjax

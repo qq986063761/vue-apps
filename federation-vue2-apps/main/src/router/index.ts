@@ -19,6 +19,7 @@ const router = new VueRouter({
 })
 
 // ============ 子应用路由注册 ============
+const registeredSubAppRoutePrefixes = new Set<string>()
 
 /**
  * 给路由数组统一添加路径前缀和名称前缀
@@ -45,10 +46,16 @@ function prefixRoutes(routes: Array<RouteConfig>, prefix: string): Array<RouteCo
  */
 export function registerSubAppRoutes(configs: SubAppConfig[]): void {
   configs.forEach(({ prefix, routes }) => {
+    if (registeredSubAppRoutePrefixes.has(prefix)) {
+      console.log(`[main] 子应用路由已存在，跳过重复注册: ${prefix}`)
+      return
+    }
+
     const prefixedRoutes = prefixRoutes(routes, prefix)
     prefixedRoutes.forEach(route => {
       router.addRoute(route)
     })
+    registeredSubAppRoutePrefixes.add(prefix)
     console.log(`[main] 子应用路由已注册: ${prefix} (${prefixedRoutes.length} 条路由)`)
   })
 

@@ -3,7 +3,7 @@
     <!-- ===== 左侧菜单 ===== -->
     <el-menu
       :default-active="activeMenu"
-      router
+      @select="handleMenuSelect"
       class="w-56 flex-shrink-0"
       background-color="#304156"
       text-color="#bfcbd9"
@@ -16,12 +16,12 @@
         <i class="el-icon-s-home"></i>
         <span>首页</span>
       </el-menu-item>
-      <el-menu-item index="/app1">
-        <i class="el-icon-menu"></i>
+      <el-menu-item index="/app1" :disabled="loadingMenu !== ''">
+        <i :class="loadingMenu === '/app1' ? 'el-icon-loading' : 'el-icon-menu'"></i>
         <span>app1</span>
       </el-menu-item>
-      <el-menu-item index="/app2">
-        <i class="el-icon-menu"></i>
+      <el-menu-item index="/app2" :disabled="loadingMenu !== ''">
+        <i :class="loadingMenu === '/app2' ? 'el-icon-loading' : 'el-icon-menu'"></i>
         <span>app2</span>
       </el-menu-item>
     </el-menu>
@@ -43,9 +43,12 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { getSubAppNameFromPath, loadSubApp } from './sub-app-loader'
 
 @Component
 export default class App extends Vue {
+  loadingMenu = ''
+
   get activeMenu(): string {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const path = (this as any).$route.path
@@ -53,6 +56,35 @@ export default class App extends Vue {
     if (path.startsWith('/app1')) return '/app1'
     if (path.startsWith('/app2')) return '/app2'
     return '/'
+  }
+
+  async handleMenuSelect(index: string): Promise<void> {
+    const subAppName = getSubAppNameFromPath(index)
+
+    if (subAppName) {
+      this.loadingMenu = index
+      try {
+        await loadSubApp(subAppName)
+      } catch (err) {
+        console.warn(`[main] 菜单加载子应用失败: ${subAppName}`, err)
+        ;(this as any).$message.error(`子应用 ${subAppName} 加载失败，请确认 remoteEntry.js 可访问`)
+        return
+      } finally {
+        this.loadingMenu = ''
+      }
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((this as any).$route.path === index) return
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (this as any).$router.push(index)
+    } catch (err) {
+      if (!err || (err as Error).name !== 'NavigationDuplicated') {
+        throw err
+      }
+    }
   }
 }
 </script>

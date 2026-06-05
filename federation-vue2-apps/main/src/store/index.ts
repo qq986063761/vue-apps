@@ -28,6 +28,11 @@ const store = new Vuex.Store({
  */
 export function registerSubAppStores(configs: StoreModuleConfig[]): void {
   configs.forEach(({ namespace, module }) => {
+    if ((store as any).hasModule(namespace)) {
+      console.log(`[main] 子应用 Store 模块已存在，跳过重复注册: ${namespace}`)
+      return
+    }
+
     // 确保模块以命名空间方式注册
     if (!module.namespaced) {
       console.warn(`[main] 子应用 store 模块 ${namespace} 未设置 namespaced: true，已自动设置`)
