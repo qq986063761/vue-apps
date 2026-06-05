@@ -1,5 +1,5 @@
 import { RouteConfig } from 'vue-router'
-import { AxiosInstance } from 'axios'
+import { AxiosRequestConfig } from 'axios'
 
 // ============ 子应用 Store 模块配置 ============
 export interface StoreModuleConfig {
@@ -15,8 +15,23 @@ export interface StoreModuleConfig {
 }
 
 // ============ 子应用 Ajax 配置 ============
+export type SubAppAjaxRequestMethod = (
+  key: string,
+  params?: unknown,
+  config?: AxiosRequestConfig
+) => Promise<unknown>
+
+export interface InjectedSubAppAjax {
+  appName: string
+  get: SubAppAjaxRequestMethod
+  post: SubAppAjaxRequestMethod
+  put: SubAppAjaxRequestMethod
+  patch: SubAppAjaxRequestMethod
+  delete: SubAppAjaxRequestMethod
+}
+
 export interface SubAppAjaxFactoryOptions {
-  ajax: AxiosInstance
+  ajax: InjectedSubAppAjax
   path: string
 }
 

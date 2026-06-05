@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import axios, { AxiosInstance } from 'axios'
-import type { AjaxConfig, SubAppAjaxModule } from '../types/remotes'
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import type { AjaxConfig, InjectedSubAppAjax, SubAppAjaxModule } from '../types/remotes'
 
 export type AjaxRequestMethod = (...args: unknown[]) => Promise<unknown>
 export type AjaxRequestMethodMap = Record<string, AjaxRequestMethod>
@@ -14,6 +14,8 @@ export interface GlobalAjaxMap {
   getUsers: AjaxRequestMethod
   [key: string]: AjaxRequestMethod | AjaxRequestMethodMap
 }
+
+type SubAppAjaxMethodName = 'get' | 'post' | 'put' | 'patch' | 'delete'
 
 // 主应用自身的 ajax 实例
 const mainAjax: AxiosInstance = axios.create({
@@ -69,6 +71,72 @@ function normalizePath(path: string): string {
   return normalized.startsWith('/') ? normalized : `/${normalized}`
 }
 
+function resolveSubAppApiUrl(appName: string, key: string): string {
+  const apiList = subAppAjaxMap[appName] && subAppAjaxMap[appName].apiList
+  if (!apiList) {
+    throw new Error(`[main] 未找到子应用 ${appName} 的 apiList 配置`)
+  }
+
+  const url = apiList[key]
+  if (!url) {
+    throw new Error(`[main] 未找到子应用 ${appName} 的接口映射: ${key}`)
+  }
+
+  return url
+}
+
+function requestSubAppApi(
+  this: InjectedSubAppAjax,
+  method: SubAppAjaxMethodName,
+  key: string,
+  params?: unknown,
+  config?: AxiosRequestConfig
+): Promise<unknown> {
+  const url = resolveSubAppApiUrl(this.appName, key)
+
+  switch (method) {
+    case 'get': {
+      const requestConfig: AxiosRequestConfig = { ...(config || {}) }
+      if (params !== undefined) requestConfig.params = params
+      return mainAjax.get(url, requestConfig)
+    }
+    case 'post':
+      return mainAjax.post(url, params, config)
+    case 'put':
+      return mainAjax.put(url, params, config)
+    case 'patch':
+      return mainAjax.patch(url, params, config)
+    case 'delete': {
+      const requestConfig: AxiosRequestConfig = { ...(config || {}) }
+      if (params !== undefined) requestConfig.data = params
+      return mainAjax.delete(url, requestConfig)
+    }
+    default:
+      return Promise.reject(new Error(`[main] 不支持的请求方法: ${method}`))
+  }
+}
+
+function createSubAppAjaxProxy(appName: string): InjectedSubAppAjax {
+  return {
+    appName,
+    get(key, params, config) {
+      return requestSubAppApi.call(this, 'get', key, params, config)
+    },
+    post(key, params, config) {
+      return requestSubAppApi.call(this, 'post', key, params, config)
+    },
+    put(key, params, config) {
+      return requestSubAppApi.call(this, 'put', key, params, config)
+    },
+    patch(key, params, config) {
+      return requestSubAppApi.call(this, 'patch', key, params, config)
+    },
+    delete(key, params, config) {
+      return requestSubAppApi.call(this, 'delete', key, params, config)
+    }
+  }
+}
+
 function createGlobalAjax(): GlobalAjaxMap {
   return Object.keys(subAppAjaxMap).reduce<GlobalAjaxMap>(
     (ajaxMap, name) => ({
@@ -103,8 +171,9 @@ export function registerSubAppAjax(configs: AjaxConfig[]): void {
     }
 
     const appPath = normalizePath(path || `/${name}`)
+    const subAppAjax = createSubAppAjaxProxy(name)
     const appAjaxModule = ajax({
-      ajax: mainAjax,
+      ajax: subAppAjax,
       path: appPath
     })
     console.log(`[main] 子应用 ${name} 的 ajax 配置已注册，path: ${appPath}`)
