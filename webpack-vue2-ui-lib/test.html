@@ -446,7 +446,17 @@
   }
 
   // 注册组件库
-  Vue.use(UI);
+  // UMD 导出的 install 在 .default 上: { default: { install }, UiButton, UiInput, ... }
+  Vue.use(UI.default || UI);
+
+  // Mock $route / $router 到 Vue.prototype，使 Menu 等所有子组件都能访问
+  Vue.prototype.$route = { path: '/overview' };
+  Vue.prototype.$router = {
+    push: function(path) {
+      console.log('[Menu mock] navigate to:', path);
+      Vue.prototype.$route = { path: path };
+    }
+  };
 
   new Vue({
     el: '#app',
@@ -489,17 +499,6 @@
       comboInput: '',
       comboDialog: false,
       comboFormData: '',
-    },
-
-    // Mock $route / $router 使得 Menu 组件不会报错
-    beforeCreate: function() {
-      this.$route = { path: '/overview' };
-      this.$router = {
-        push: function(path) {
-          console.log('[Menu mock] navigate to:', path);
-          this.$route = { path: path };
-        }.bind(this)
-      };
     },
 
     methods: {
