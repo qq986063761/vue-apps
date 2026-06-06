@@ -36,6 +36,7 @@ export default defineConfig({
         pinia: { singleton: true },
         'element-plus': { singleton: true },
       },
+      shareStrategy: 'loaded-first',
       dev: {
         remoteHmr: true,
       },
