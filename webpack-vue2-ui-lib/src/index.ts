@@ -9,26 +9,22 @@ import UiMenu from "./components/Menu.vue";
 // 按需引入时使用
 export { UiButton, UiInput, UiDialog, UiMenu };
 
-// 默认导出 —— 支持全量注册 Vue.use()
-const components = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default {
+  // 组件引用，供按需使用：window['webpack-vue2-ui-lib'].UiButton
   UiButton,
   UiInput,
   UiDialog,
   UiMenu,
-};
-
-const defaultExport = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   install(Vue: any): void {
-    Object.keys(components).forEach((name) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      Vue.component(name, (components as any)[name]);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const comps: Record<string, any> = { UiButton, UiInput, UiDialog, UiMenu };
+    Object.keys(comps).forEach((name) => {
+      Vue.component(name, comps[name]);
     });
   },
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default defaultExport;
 
 // 导出类型（方便 TypeScript 用户）
 export type { default as UiButtonType } from "./components/Button.vue";
