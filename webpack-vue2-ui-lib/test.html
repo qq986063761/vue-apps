@@ -434,6 +434,8 @@
 
 <!-- Vue 2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+<!-- vue-router CDN（Vue 2 对应 v3.x） -->
+<script src="https://cdn.jsdelivr.net/npm/vue-router@3.6.5/dist/vue-router.min.js"></script>
 <!-- 组件库 UMD -->
 <script src="./lib/webpack-vue2-ui-lib.umd.min.js"></script>
 
@@ -449,16 +451,19 @@
   // UMD 导出的 install 在 .default 上: { default: { install }, UiButton, UiInput, ... }
   Vue.use(UI.default || UI);
 
-  // Mock $route / $router 到 Vue.prototype，使 Menu 等所有子组件都能访问
-  Vue.prototype.$route = { path: '/overview' };
-  Vue.prototype.$router = {
-    push: function(path) {
-      console.log('[Menu mock] navigate to:', path);
-      Vue.prototype.$route = { path: path };
-    }
-  };
+  // 创建 vue-router 实例，使 Menu 组件能正常导航
+  var router = new VueRouter({
+    routes: [
+      { path: '/overview', component: { template: '<div></div>' } },
+      { path: '/button',   component: { template: '<div></div>' } },
+      { path: '/input',    component: { template: '<div></div>' } },
+      { path: '/dialog',   component: { template: '<div></div>' } },
+      { path: '/menu',     component: { template: '<div></div>' } },
+    ]
+  });
 
   new Vue({
+    router: router,
     el: '#app',
 
     data: {
