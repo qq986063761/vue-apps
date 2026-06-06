@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
-import federation from '@originjs/vite-plugin-federation'
+import { federation } from '@module-federation/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,15 +14,38 @@ export default defineConfig({
     federation({
       name: 'main',
       remotes: {
-        app1: 'http://localhost:9981/assets/remoteEntry.js',
-        app2: 'http://localhost:9982/assets/remoteEntry.js',
+        app1: {
+          type: 'module',
+          name: 'app1',
+          entry: 'http://localhost:9981/remoteEntry.js',
+          entryGlobalName: 'app1',
+          shareScope: 'default',
+        },
+        app2: {
+          type: 'module',
+          name: 'app2',
+          entry: 'http://localhost:9982/remoteEntry.js',
+          entryGlobalName: 'app2',
+          shareScope: 'default',
+        },
       },
-      shared: ['vue', 'vue-router', 'pinia', 'element-plus'],
+      filename: 'remoteEntry.js',
+      shared: {
+        vue: { singleton: true },
+        'vue-router': { singleton: true },
+        pinia: { singleton: true },
+        'element-plus': { singleton: true },
+      },
+      dev: {
+        remoteHmr: true,
+      },
+      dts: false,
     }),
     vueDevTools(),
   ],
   server: {
     port: 9980,
+    origin: 'http://localhost:9980',
   },
   preview: {
     port: 9980,

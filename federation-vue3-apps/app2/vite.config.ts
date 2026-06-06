@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
-import federation from '@originjs/vite-plugin-federation'
+import { federation } from '@module-federation/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -17,13 +17,23 @@ export default defineConfig({
       exposes: {
         './index': './src/exports/index.ts',
       },
-      shared: ['vue', 'vue-router', 'pinia', 'element-plus'],
+      shared: {
+        vue: { singleton: true },
+        'vue-router': { singleton: true },
+        pinia: { singleton: true },
+        'element-plus': { singleton: true },
+      },
+      dev: {
+        remoteHmr: true,
+      },
+      dts: false,
     }),
     vueDevTools(),
   ],
   server: {
     port: 9982,
     cors: true,
+    origin: 'http://localhost:9982',
   },
   preview: {
     port: 9982,
