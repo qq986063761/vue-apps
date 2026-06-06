@@ -1,9 +1,9 @@
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
-  // 库构建时 CSS 内联到 JS 中，方便按需加载
+  // CSS 提取为独立文件
   css: {
-    extract: process.env.NODE_ENV === 'production' ? false : true,
+    extract: true,
     sourceMap: true
   },
 
