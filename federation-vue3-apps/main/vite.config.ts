@@ -5,6 +5,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { federation } from '@module-federation/vite'
+import type { LogLevel, RolldownLog, LogOrStringHandler } from 'rolldown'
 
 const remoteDevPorts = {
   app1: 9981,
@@ -12,6 +13,23 @@ const remoteDevPorts = {
 } as const
 
 type RemoteAppName = keyof typeof remoteDevPorts
+
+function suppressVueUsePureAnnotationWarnings(
+  level: LogLevel,
+  log: RolldownLog,
+  defaultHandler: LogOrStringHandler,
+): void {
+  const id = log.id?.replace(/\\/g, '/') ?? ''
+
+  if (
+    log.code === 'INVALID_ANNOTATION' &&
+    id.includes('node_modules/@vueuse/core/dist/index.js')
+  ) {
+    return
+  }
+
+  defaultHandler(level, log)
+}
 
 function getRemoteEntry(name: RemoteAppName, command: 'serve' | 'build'): string {
   if (command === 'serve') {
@@ -49,7 +67,6 @@ export default defineConfig(({ command }) => ({
         vue: { singleton: true },
         'vue-router': { singleton: true },
         pinia: { singleton: true },
-        'element-plus': { singleton: true },
       },
       shareStrategy: 'loaded-first',
       dev: {
@@ -73,5 +90,8 @@ export default defineConfig(({ command }) => ({
   },
   build: {
     target: 'esnext',
+    rolldownOptions: {
+      onLog: suppressVueUsePureAnnotationWarnings,
+    },
   },
 }))
