@@ -27,7 +27,10 @@
     </el-menu>
 
     <!-- ===== 右侧内容区 ===== -->
-    <div class="flex-1 flex flex-col overflow-hidden">
+    <div
+      class="app-main flex-1 flex flex-col overflow-hidden"
+      v-loading="loadingMenu !== ''"
+    >
       <!-- 顶部面包屑条 -->
       <div class="h-12 flex items-center px-4 bg-white border-b border-gray-200 text-sm text-gray-600">
         <span>当前位置：</span>
@@ -95,5 +98,13 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+}
+
+.el-loading-spinner .circular {
+  margin: 0 auto;
+}
+
+.app-main {
+  position: relative;
 }
 </style>
