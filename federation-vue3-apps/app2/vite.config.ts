@@ -7,7 +7,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import { federation } from '@module-federation/vite'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? './' : '/',
   plugins: [
     vue(),
     vueJsx(),
@@ -48,4 +49,4 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
   },
-})
+}))
