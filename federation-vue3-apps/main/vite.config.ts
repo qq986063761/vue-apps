@@ -6,8 +6,23 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { federation } from '@module-federation/vite'
 
+const remoteDevPorts = {
+  app1: 9981,
+  app2: 9982,
+} as const
+
+type RemoteAppName = keyof typeof remoteDevPorts
+
+function getRemoteEntry(name: RemoteAppName, command: 'serve' | 'build'): string {
+  if (command === 'serve') {
+    return `http://localhost:${remoteDevPorts[name]}/remoteEntry.js`
+  }
+
+  return `./${name}/remoteEntry.js`
+}
+
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [
     vue(),
     vueJsx(),
@@ -17,14 +32,14 @@ export default defineConfig({
         app1: {
           type: 'module',
           name: 'app1',
-          entry: 'http://localhost:9981/remoteEntry.js',
+          entry: getRemoteEntry('app1', command),
           entryGlobalName: 'app1',
           shareScope: 'default',
         },
         app2: {
           type: 'module',
           name: 'app2',
-          entry: 'http://localhost:9982/remoteEntry.js',
+          entry: getRemoteEntry('app2', command),
           entryGlobalName: 'app2',
           shareScope: 'default',
         },
@@ -59,4 +74,4 @@ export default defineConfig({
   build: {
     target: 'esnext',
   },
-})
+}))
