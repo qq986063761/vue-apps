@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>vite-vue3-ui-lib 外部 UMD 测试</title>
+  <link rel="stylesheet" href="./lib/vite-vue3-ui-lib.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f2f5;
+      padding: 40px;
+      color: #303133;
+    }
+    h1 { margin-bottom: 8px; font-size: 24px; }
+    p.subtitle { color: #909399; margin-bottom: 32px; }
+    .section {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .section h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-left: 10px;
+      border-left: 3px solid #409eff;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .result { margin-top: 10px; font-size: 13px; color: #606266; }
+    .result span { color: #409eff; font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <h1>vite-vue3-ui-lib 外部 UMD 测试</h1>
+  <p class="subtitle">通过 &lt;script&gt; 标签加载 UMD 包 + Vue/VueRouter CDN，测试所有 4 个组件</p>
+
+  <!-- Button 测试 -->
+  <div class="section">
+    <h2>1. Button 按钮</h2>
+    <div class="row">
+      <ui-button type="primary" @click="log('主要按钮')">主要按钮</ui-button>
+      <ui-button type="success">成功按钮</ui-button>
+      <ui-button type="warning">警告按钮</ui-button>
+      <ui-button type="danger">危险按钮</ui-button>
+      <ui-button type="info">信息按钮</ui-button>
+      <ui-button disabled>禁用</ui-button>
+      <ui-button type="primary" loading>加载中</ui-button>
+      <ui-button type="primary" round plain>朴素圆角</ui-button>
+    </div>
+    <div class="row" style="margin-top: 10px">
+      <ui-button type="primary" size="small">小</ui-button>
+      <ui-button type="primary">中</ui-button>
+      <ui-button type="primary" size="large">大</ui-button>
+      <ui-button type="success">
+        <template #icon>search</template>
+        搜索
+      </ui-button>
+    </div>
+    <div class="result" v-if="logText">事件日志：<span>{{ logText }}</span></div>
+  </div>
+
+  <!-- Input 测试 -->
+  <div class="section">
+    <h2>2. Input 输入框</h2>
+    <div class="row" style="max-width: 400px">
+      <ui-input v-model="input1" placeholder="基础输入框" />
+    </div>
+    <div class="row" style="max-width: 400px; margin-top: 10px">
+      <ui-input v-model="input2" clearable placeholder="可清空" />
+    </div>
+    <div class="row" style="max-width: 400px; margin-top: 10px">
+      <ui-input v-model="input3" disabled placeholder="禁用状态" />
+    </div>
+    <div class="row" style="max-width: 400px; margin-top: 10px">
+      <ui-input v-model="input4" error-msg="请输入有效的邮箱地址" placeholder="错误状态" />
+    </div>
+    <div class="result">input1：<span>{{ input1 || '(空)' }}</span> | input2：<span>{{ input2 || '(空)' }}</span></div>
+  </div>
+
+  <!-- Dialog 测试 -->
+  <div class="section">
+    <h2>3. Dialog 对话框</h2>
+    <div class="row">
+      <ui-button type="primary" @click="visible = true">打开 Dialog</ui-button>
+    </div>
+    <ui-dialog
+      :visible="visible"
+      title="UMD 测试对话框"
+      @update:visible="visible = $event"
+    >
+      <p>通过外部 UMD 包加载的 Dialog 组件。</p>
+      <p style="margin-top: 8px; font-size: 13px; color: #909399">
+        点击遮罩层或关闭按钮可关闭。
+      </p>
+      <template #footer>
+        <ui-button @click="visible = false">取消</ui-button>
+        <ui-button type="primary" @click="visible = false">确定</ui-button>
+      </template>
+    </ui-dialog>
+  </div>
+
+  <!-- Menu 测试 -->
+  <div class="section">
+    <h2>4. Menu 菜单（含真实 vue-router 跳转）</h2>
+    <p style="font-size: 13px; color: #909399; margin-bottom: 10px">
+      点击菜单项会触发 vue-router 导航，当前路由：<span>{{ routePath }}</span>
+    </p>
+    <div style="margin-left: -40px; padding: 20px; background: #1d1e2c; border-radius: 8px; overflow: hidden">
+      <ui-menu
+        title="UI Kit"
+        :menu-items="menuItems"
+      />
+    </div>
+  </div>
+</div>
+
+<!-- Vue 3 CDN -->
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<!-- Vue Router 4 CDN -->
+<script src="https://unpkg.com/vue-router@4/dist/vue-router.global.prod.js"></script>
+<!-- UMD 组件库 -->
+<script src="./lib/vite-vue3-ui-lib.umd.js"></script>
+
+<script>
+const { createApp, ref, computed } = Vue
+const { createRouter, createWebHashHistory } = VueRouter
+
+// 创建 router 实例，Menu 组件内部 useRouter()/useRoute() 可正常使用
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes: [
+    { path: '/', component: { template: '<div></div>' }, meta: { title: '概览', icon: 'home' } },
+    { path: '/button', component: { template: '<div></div>' }, meta: { title: 'Button 按钮', icon: 'radio_button_checked' } },
+    { path: '/input', component: { template: '<div></div>' }, meta: { title: 'Input 输入框', icon: 'edit' } },
+    { path: '/dialog', component: { template: '<div></div>' }, meta: { title: 'Dialog 对话框', icon: 'chat' } },
+  ],
+})
+
+const app = createApp({
+  setup() {
+    const visible = ref(false)
+    const input1 = ref('')
+    const input2 = ref('')
+    const input3 = ref('')
+    const input4 = ref('')
+    const logText = ref('')
+    const routePath = computed(() => router.currentRoute.value.path)
+
+    const menuItems = [
+      { label: '概览', path: '/', icon: 'home' },
+      { label: 'Button', path: '/button', icon: 'radio_button_checked' },
+      { label: 'Input', path: '/input', icon: 'edit' },
+      { label: 'Dialog', path: '/dialog', icon: 'chat' },
+    ]
+
+    function log(msg) {
+      const time = new Date().toLocaleTimeString()
+      logText.value = `[${time}] ${msg}`
+      console.log('Button click:', msg)
+    }
+
+    return { visible, input1, input2, input3, input4, menuItems, logText, log, routePath }
+  }
+})
+
+app.use(router)
+app.use(ViteVue3UiLib)
+app.mount('#app')
+
+console.log('vite-vue3-ui-lib UMD 包加载成功！')
+console.log('组件列表:', Object.keys(ViteVue3UiLib).filter(k => k !== 'install'))
+</script>
+
+</body>
+</html>
