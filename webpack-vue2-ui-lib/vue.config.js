@@ -1,6 +1,8 @@
 const { defineConfig } = require('@vue/cli-service')
 
 module.exports = defineConfig({
+  publicPath: './',
+  
   // CSS 提取为独立文件
   css: {
     extract: true,
