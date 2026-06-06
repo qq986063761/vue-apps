@@ -17,8 +17,7 @@ const components = {
   UiMenu,
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default {
+const defaultExport = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   install(Vue: any): void {
     Object.keys(components).forEach((name) => {
@@ -27,6 +26,9 @@ export default {
     });
   },
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default defaultExport;
 
 // 导出类型（方便 TypeScript 用户）
 export type { default as UiButtonType } from "./components/Button.vue";

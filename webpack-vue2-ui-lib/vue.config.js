@@ -25,10 +25,18 @@ module.exports = defineConfig({
 
   chainWebpack: config => {
     if (isLibMode) {
-      // lib 模式下移除 html-webpack-plugin，防止生成无意义的 demo.html
-      config.plugins.delete('html')
-      config.plugins.delete('preload')
-      config.plugins.delete('prefetch')
+      
+    }
+  },
+
+  // configureWebpack 拿到的 config 是 chainWebpack 执行完 + Vue CLI lib 追加插件后的最终配置
+  // Vue CLI 的 resolveLibConfig 会在 chainWebpack 之后追加 demo-html 插件，所以在这里删
+  configureWebpack: config => {
+    if (isLibMode) {
+      const HtmlWebpackPlugin = require('html-webpack-plugin')
+      config.plugins = config.plugins.filter(
+        p => !(p instanceof HtmlWebpackPlugin)
+      )
     }
   }
 })

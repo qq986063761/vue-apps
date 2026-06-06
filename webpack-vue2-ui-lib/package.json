@@ -15,6 +15,7 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "playwright test",
     "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service lint --fix",
     "installi": "npm i"
   },
   "dependencies": {
