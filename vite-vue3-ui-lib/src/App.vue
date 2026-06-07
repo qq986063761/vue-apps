@@ -1,33 +1,31 @@
 <template>
-  <div id="app">
-    <!-- 左侧菜单 -->
-    <ui-menu
-      title="UI Kit"
-      :menu-items="menuItems"
-      :collapsed="menuCollapsed"
-      @update:collapsed="menuCollapsed = $event"
-    />
+  <!-- 左侧菜单 -->
+  <ui-menu
+    title="UI Kit"
+    :menu-items="menuItems"
+    :collapsed="menuCollapsed"
+    @update:collapsed="menuCollapsed = $event"
+  />
 
-    <!-- 右侧内容区 -->
-    <div class="main-area" :class="{ 'is-menu-collapsed': menuCollapsed }">
-      <!-- 顶栏 -->
-      <header class="main-header">
-        <h2 class="main-header__title">{{ currentPageTitle }}</h2>
-        <a
-          class="main-header__link"
-          href="https://github.com"
-          target="_blank"
-          rel="noopener"
-        >
-          GitHub
-        </a>
-      </header>
+  <!-- 右侧内容区 -->
+  <div class="main-area" :class="{ 'is-menu-collapsed': menuCollapsed }">
+    <!-- 顶栏 -->
+    <header class="main-header">
+      <h2 class="main-header__title">{{ currentPageTitle }}</h2>
+      <a
+        class="main-header__link"
+        href="https://github.com"
+        target="_blank"
+        rel="noopener"
+      >
+        GitHub
+      </a>
+    </header>
 
-      <!-- 页面内容 -->
-      <main class="main-content">
-        <router-view />
-      </main>
-    </div>
+    <!-- 页面内容 -->
+    <main class="main-content">
+      <router-view />
+    </main>
   </div>
 </template>
 
