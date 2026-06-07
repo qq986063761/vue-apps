@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
       // lib 模式不需要 devtools
       ...(isLib ? [] : [vueDevTools()]),
     ],
+    base: './',
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),

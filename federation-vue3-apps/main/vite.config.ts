@@ -41,6 +41,7 @@ function getRemoteEntry(name: RemoteAppName, command: 'serve' | 'build'): string
 
 // https://vite.dev/config/
 export default defineConfig(({ command }) => ({
+  base: './',
   plugins: [
     vue(),
     vueJsx(),
