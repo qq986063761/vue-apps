@@ -156,7 +156,7 @@ function log(msg: string): void {
 </script>
 
 <style scoped lang="scss">
-@import "../styles/variables";
+@use "../styles/variables" as *;
 
 .demo-page {
   max-width: 860px;

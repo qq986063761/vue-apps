@@ -1,4 +1,4 @@
-@import './variables.scss';
+@use './variables.scss';
 
 // 全局 reset 样式（仅供 dev 预览使用，不打包进组件库）
 *,

@@ -79,7 +79,7 @@ function toggle(): void {
 </script>
 
 <style scoped lang="scss">
-@import "../styles/variables";
+@use "../styles/variables" as *;
 
 $menu-width: 220px;
 $menu-collapsed-width: 64px;

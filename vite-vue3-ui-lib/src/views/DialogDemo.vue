@@ -118,7 +118,7 @@ const visible3 = ref(false)
 </script>
 
 <style scoped lang="scss">
-@import "../styles/variables";
+@use "../styles/variables" as *;
 
 .demo-page {
   max-width: 860px;

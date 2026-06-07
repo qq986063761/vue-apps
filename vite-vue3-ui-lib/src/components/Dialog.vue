@@ -74,7 +74,7 @@ function handleOverlayClick(): void {
 </script>
 
 <style scoped lang="scss">
-@import "../styles/variables";
+@use "../styles/variables" as *;
 
 .ui-dialog-overlay {
   position: fixed;

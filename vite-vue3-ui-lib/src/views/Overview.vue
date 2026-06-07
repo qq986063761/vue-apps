@@ -42,7 +42,7 @@ const componentCount = 4
 </script>
 
 <style scoped lang="scss">
-@import "../styles/variables";
+@use "../styles/variables" as *;
 
 .overview {
   max-width: 800px;

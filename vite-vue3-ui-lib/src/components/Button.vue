@@ -53,7 +53,8 @@ function handleClick(e: MouseEvent): void {
 </script>
 
 <style scoped lang="scss">
-@import "../styles/variables";
+@use 'sass:color';
+@use "../styles/variables" as *;
 
 .ui-button {
   display: inline-flex;
@@ -80,8 +81,8 @@ function handleClick(e: MouseEvent): void {
   }
 
   &:active {
-    color: darken($primary-color, 10%);
-    border-color: darken($primary-color, 10%);
+    color: color.adjust($primary-color, $lightness: -10%);
+    border-color: color.adjust($primary-color, $lightness: -10%);
   }
 
   // 尺寸
@@ -101,12 +102,12 @@ function handleClick(e: MouseEvent): void {
     border-color: $primary-color;
     color: #fff;
     &:hover {
-      background: lighten($primary-color, 8%);
-      border-color: lighten($primary-color, 8%);
+      background: color.adjust($primary-color, $lightness: 8%);
+      border-color: color.adjust($primary-color, $lightness: 8%);
     }
     &:active {
-      background: darken($primary-color, 8%);
-      border-color: darken($primary-color, 8%);
+      background: color.adjust($primary-color, $lightness: -8%);
+      border-color: color.adjust($primary-color, $lightness: -8%);
     }
   }
 
@@ -115,12 +116,12 @@ function handleClick(e: MouseEvent): void {
     border-color: $success-color;
     color: #fff;
     &:hover {
-      background: lighten($success-color, 8%);
-      border-color: lighten($success-color, 8%);
+      background: color.adjust($success-color, $lightness: 8%);
+      border-color: color.adjust($success-color, $lightness: 8%);
     }
     &:active {
-      background: darken($success-color, 8%);
-      border-color: darken($success-color, 8%);
+      background: color.adjust($success-color, $lightness: -8%);
+      border-color: color.adjust($success-color, $lightness: -8%);
     }
   }
 
@@ -129,12 +130,12 @@ function handleClick(e: MouseEvent): void {
     border-color: $warning-color;
     color: #fff;
     &:hover {
-      background: lighten($warning-color, 8%);
-      border-color: lighten($warning-color, 8%);
+      background: color.adjust($warning-color, $lightness: 8%);
+      border-color: color.adjust($warning-color, $lightness: 8%);
     }
     &:active {
-      background: darken($warning-color, 8%);
-      border-color: darken($warning-color, 8%);
+      background: color.adjust($warning-color, $lightness: -8%);
+      border-color: color.adjust($warning-color, $lightness: -8%);
     }
   }
 
@@ -143,12 +144,12 @@ function handleClick(e: MouseEvent): void {
     border-color: $danger-color;
     color: #fff;
     &:hover {
-      background: lighten($danger-color, 8%);
-      border-color: lighten($danger-color, 8%);
+      background: color.adjust($danger-color, $lightness: 8%);
+      border-color: color.adjust($danger-color, $lightness: 8%);
     }
     &:active {
-      background: darken($danger-color, 8%);
-      border-color: darken($danger-color, 8%);
+      background: color.adjust($danger-color, $lightness: -8%);
+      border-color: color.adjust($danger-color, $lightness: -8%);
     }
   }
 
@@ -157,12 +158,12 @@ function handleClick(e: MouseEvent): void {
     border-color: $info-color;
     color: #fff;
     &:hover {
-      background: lighten($info-color, 8%);
-      border-color: lighten($info-color, 8%);
+      background: color.adjust($info-color, $lightness: 8%);
+      border-color: color.adjust($info-color, $lightness: 8%);
     }
     &:active {
-      background: darken($info-color, 8%);
-      border-color: darken($info-color, 8%);
+      background: color.adjust($info-color, $lightness: -8%);
+      border-color: color.adjust($info-color, $lightness: -8%);
     }
   }
 

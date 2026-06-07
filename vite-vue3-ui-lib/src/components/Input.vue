@@ -118,7 +118,7 @@ defineExpose({ focus, blur })
 </script>
 
 <style scoped lang="scss">
-@import "../styles/variables";
+@use "../styles/variables" as *;
 
 .ui-input {
   display: inline-block;
