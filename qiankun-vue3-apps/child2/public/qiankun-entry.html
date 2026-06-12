@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Child2 Qiankun Entry</title>
+    <style>html, body { margin: 0; padding: 0; width: 100%; height: 100%; }</style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      (function() {
+        var appName = 'child2-app';
+        var publicPath = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ || globalThis.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ || 'http://localhost:8082/';
+        var moduleUrl = new URL('src/main.js', publicPath).href;
+        var lifecycleNames = ['bootstrap', 'mount', 'unmount', 'update'];
+        var lifecycle = {};
+        window.__POWERED_BY_QIANKUN__ = true;
+        globalThis.__POWERED_BY_QIANKUN__ = true;
+        var modulePromise = import(moduleUrl);
+
+        window[appName] = {};
+        lifecycleNames.forEach(function(name) {
+          var resolve;
+          var promise = new Promise(function(r) { resolve = r; });
+          lifecycle[name] = Object.assign(
+            function() {
+              var args = arguments;
+              return promise.then(function(fn) { return fn.apply(null, args); });
+            },
+            { resolve: resolve }
+          );
+          window[appName][name] = lifecycle[name];
+        });
+
+        modulePromise.then(function(m) {
+          lifecycleNames.forEach(function(name) {
+            if (typeof m[name] === 'function') lifecycle[name].resolve(m[name]);
+          });
+        }).catch(function(err) {
+          console.error('[qiankun-bridge] Failed to load child2:', err);
+        });
+      })();
+    </script>
+  </body>
+</html>

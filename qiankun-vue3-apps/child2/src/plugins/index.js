@@ -1,6 +1,5 @@
 import { defineAsyncComponent, h } from 'vue'
 import store from '@/store'
-import { qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
 
 const getRouter = () => window.__CHILD_ROUTER_INSTANCE__ || null
 
@@ -57,7 +56,7 @@ export const child2App = {
 }
 
 // 独立运行时挂到 window.$app；qiankun 沙箱模式下沙箱 window 隔离，不影响主应用
-if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
+if (!window.__POWERED_BY_QIANKUN__) {
   window.$app = child2App
 }
 

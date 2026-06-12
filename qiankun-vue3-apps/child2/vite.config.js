@@ -1,14 +1,15 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { federation } from '@module-federation/vite'
-import qiankun from 'vite-plugin-qiankun'
 import { resolve } from 'path'
+
+// qiankun 生命周期桥接脚本已直接写在 index.html 中，
+// 不再依赖 vite-plugin-qiankun 的 HTML 转换。
 
 export default defineConfig(({ command }) => ({
   base: command === 'build' ? './' : '/',
   plugins: [
     vue(),
-    qiankun('child2-app', { useDevMode: true }),
     federation({
       name: 'child2',
       filename: 'remoteEntry.js',

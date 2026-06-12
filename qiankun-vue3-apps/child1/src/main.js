@@ -53,7 +53,7 @@ function restoreFromCache(props) {
   return true
 }
 
-// 独立运行时直接渲染（vite-plugin-qiankun-lite 会将 window 代理到沙箱 window）
+// 独立运行时直接渲染
 if (!window.__POWERED_BY_QIANKUN__) {
   initWindowParentApp()
   render()

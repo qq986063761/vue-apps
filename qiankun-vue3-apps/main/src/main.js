@@ -1,7 +1,7 @@
 window.__APP_CONFIG__ = {
   qiankun: {
-    child1: '//localhost:8081',
-    child2: '//localhost:8082'
+    child1: '//localhost:8081/qiankun-entry.html',
+    child2: '//localhost:8082/qiankun-entry.html'
   }
 }
 

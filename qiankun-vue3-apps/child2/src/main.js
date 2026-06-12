@@ -5,7 +5,7 @@ import { createChildRouter } from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import plugin, { initWindowParentApp } from './plugins'
-import { renderWithQiankun, qiankunWindow } from 'vite-plugin-qiankun/dist/helper'
+// 生命周期由 vite.config.js 中的 qiankunBridge 插件从 ES module 导出中桥接
 
 let routerInstance = null
 let vueApp = null
@@ -53,40 +53,41 @@ function restoreFromCache(props) {
   return true
 }
 
-renderWithQiankun({
-  bootstrap() {
-    console.log('child2 bootstrap')
-  },
-  mount(props) {
-    window.appName = 'child2'
-    console.log('child2 mount', props, window)
-    window.__QIANKUN_PROPS__ = props
-    initWindowParentApp()
-    if (restoreFromCache(props)) return
-    render(props)
-  },
-  unmount() {
-    console.log('child2 unmount')
-    if (vueApp) {
-      instanceCache.vueApp = vueApp
-      instanceCache.routerInstance = routerInstance
-      instanceCache.el = vueApp._container
-      const el = vueApp._container
-      if (el && el.parentNode) {
-        el.parentNode.removeChild(el)
-      }
-      vueApp = null
-      routerInstance = null
-    }
-    window.__CHILD_ROUTER_INSTANCE__ = null
-  },
-  update(props) {
-    console.log('child2 update', props)
-  }
-})
-
 // 独立运行时直接渲染
-if (!qiankunWindow.__POWERED_BY_QIANKUN__) {
+if (!window.__POWERED_BY_QIANKUN__) {
   initWindowParentApp()
   render()
+}
+
+export function bootstrap() {
+  console.log('child2 bootstrap')
+}
+
+export function mount(props) {
+  window.appName = 'child2'
+  console.log('child2 mount', props, window)
+  window.__QIANKUN_PROPS__ = props
+  initWindowParentApp()
+  if (restoreFromCache(props)) return
+  render(props)
+}
+
+export function unmount() {
+  console.log('child2 unmount')
+  if (vueApp) {
+    instanceCache.vueApp = vueApp
+    instanceCache.routerInstance = routerInstance
+    instanceCache.el = vueApp._container
+    const el = vueApp._container
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el)
+    }
+    vueApp = null
+    routerInstance = null
+  }
+  window.__CHILD_ROUTER_INSTANCE__ = null
+}
+
+export function update(props) {
+  console.log('child2 update', props)
 }
