@@ -3,6 +3,7 @@ import store from '@/store'
 import ajax from '@/ajax'
 import ElementUI from 'element-ui';
 import Button from '@/components/Button.vue'
+import Item from '@/components/Item.vue'
 import modal from '@/components/modal.js'
 
 // 样式可以不引入，会继承其他应用的 element-ui 样式
@@ -22,6 +23,14 @@ const ImportedButton = Vue.extend({
   store,
 })
 
+const ImportedItem = Vue.extend({
+  extends: Item,
+  get router() {
+    return window.__CHILD_ROUTER_INSTANCE__ || null
+  },
+  store,
+})
+
 const init = async () => {
   await store.dispatch('getData')
 }
@@ -31,6 +40,7 @@ init()
 
 export default {
   Button: ImportedButton,
+  Item: ImportedItem,
   modal,
   store,
 }

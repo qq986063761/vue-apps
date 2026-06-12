@@ -84,7 +84,7 @@ export function initWindowParentApp() {
 }
 
 // 异步组件加载中占位（用 render 避免依赖模板编译器）
-const Child1ButtonLoading = {
+const Loading = {
   render(h) {
     return h('div', '组件加载中...')
   }
@@ -92,6 +92,7 @@ const Child1ButtonLoading = {
 
 export default {
   async install(Vue) {
+    // 注册 Child1Button
     Vue.component('Child1Button', () => ({
       component: new Promise(resolve => {
         const next = () => {
@@ -106,7 +107,25 @@ export default {
         }
         next()
       }),
-      loading: Child1ButtonLoading
+      loading: Loading
+    }))
+
+    // 注册 Child1Item（用于测试联邦引入局部组件）
+    Vue.component('Child1Item', () => ({
+      component: new Promise(resolve => {
+        const next = () => {
+          const parentMicroApp = window.$parentApp
+          const { child1 } = parentMicroApp?.apps || {}
+          const { Item } = child1 || {}
+          if (!Item) {
+            setTimeout(next, 60)
+          } else {
+            resolve(Item)
+          }
+        }
+        next()
+      }),
+      loading: Loading
     }))
   }
 }

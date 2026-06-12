@@ -21,7 +21,10 @@ module.exports = defineConfig({
     plugins: [
       new ModuleFederationPlugin({
         name: 'child2',
-        filename: 'remoteEntry.js'
+        filename: 'remoteEntry.js',
+        remotes: {
+          child1: 'child1@http://localhost:8081/remoteEntry.js'
+        }
       })
     ]
   },

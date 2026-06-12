@@ -6,7 +6,18 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     text: 'child1 的 store 数据',
-    usrs: []
+    usrs: [],
+    demo: {
+      name: '联邦模块测试',
+      version: '1.0.0',
+      description: '这是一个通过 Module Federation 暴露的 Item 组件，用于验证联邦引入局部组件的可行性',
+      tags: ['vue2', 'module-federation', 'qiankun', '测试'],
+      config: {
+        theme: 'light',
+        locale: 'zh-CN',
+        debug: true
+      }
+    }
   },
   getters: {
   },

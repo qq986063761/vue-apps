@@ -102,10 +102,11 @@ export default {
 
     // 引入 child1 的插件
     const child1Export = await import('child1/export')
-    const { Button, modal } = child1Export.default
+    const { Button, Item, modal } = child1Export.default
 
     // 保存子组件的组件
     child1.Button = Button
+    child1.Item = Item
     child1.modal = modal
 
     console.log('main 中 child1 组件加载完成', child1Export.default)

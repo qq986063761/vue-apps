@@ -22,6 +22,13 @@
 
     <el-card class="card" shadow="hover">
       <template #header>
+        <span>联邦模块测试 - Child1 Item 组件</span>
+      </template>
+      <Child1Item />
+    </el-card>
+
+    <el-card class="card" shadow="hover">
+      <template #header>
         <span>跨应用调用组件</span>
       </template>
       <el-button type="danger" @click="openChild1Modal">
