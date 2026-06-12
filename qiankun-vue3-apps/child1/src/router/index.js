@@ -1,9 +1,10 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { isQiankunRuntime } from '../qiankun'
 
 // 独立运行时：path 为 /home、/about；乾坤下 hash 为 #/child1/xxx，path 需带 child1 前缀
 function getRoutes() {
-  const isQiankun = window.__POWERED_BY_QIANKUN__
+  const isQiankun = isQiankunRuntime()
   const prefix = isQiankun ? '/child1' : ''
   return [
     ...(isQiankun

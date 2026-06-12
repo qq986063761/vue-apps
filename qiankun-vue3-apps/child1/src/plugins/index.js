@@ -9,7 +9,7 @@ let parentAppInited = false
 export function initWindowParentApp() {
   if (parentAppInited) return
   parentAppInited = true
-  const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? window.parent?.$app
+  const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? (window.parent !== window ? window.parent?.$app : undefined)
   Object.defineProperty(window, '$parentApp', {
     get: getParentApp,
     configurable: true,
@@ -27,7 +27,7 @@ function shallowEqual(a, b) {
 }
 
 // 提供给子应用（主应用在对应乾坤生命周期会调用以下可选钩子）
-window.$app = {
+export const child1App = {
   vm: null,
   store,
   get router() {
@@ -38,7 +38,7 @@ window.$app = {
   onBeforeUnmount() {},
   to({ app, name = '', params, query, method = 'push' }) {
     if (app) {
-      window.$parentApp.to({ app, name, params, query, method })
+      window.$parentApp?.to({ app, name, params, query, method })
       return
     }
 
@@ -72,6 +72,10 @@ window.$app = {
       }
     }
   }
+}
+
+export function setupStandaloneAppApi() {
+  window.$app = child1App
 }
 
 export default {

@@ -24,7 +24,7 @@ export const child2App = {
   onBeforeUnmount() {},
   to({ app, name = '', params, query, method = 'push' }) {
     if (app) {
-      window.$parentApp.to({ app, name, params, query, method })
+      window.$parentApp?.to({ app, name, params, query, method })
       return
     }
 
@@ -50,13 +50,12 @@ export const child2App = {
         app = 'child1'
         break
     }
-    return use({ app, name, method, args })
+    return typeof use === 'function' ? use({ app, name, method, args }) : undefined
   },
   on() {}
 }
 
-// 独立运行时挂到 window.$app；qiankun 沙箱模式下沙箱 window 隔离，不影响主应用
-if (!window.__POWERED_BY_QIANKUN__) {
+export function setupStandaloneAppApi() {
   window.$app = child2App
 }
 
@@ -65,7 +64,7 @@ let parentAppInited = false
 export function initWindowParentApp() {
   if (parentAppInited) return
   parentAppInited = true
-  const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? window.parent?.$app
+  const getParentApp = () => window.__QIANKUN_PROPS__?.$app ?? (window.parent !== window ? window.parent?.$app : undefined)
   Object.defineProperty(window, '$parentApp', {
     get: getParentApp,
     configurable: true,

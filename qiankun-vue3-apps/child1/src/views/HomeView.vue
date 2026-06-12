@@ -52,6 +52,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { child1App } from '@/plugins'
 
 export default {
   name: 'HomeView',
@@ -68,7 +69,7 @@ export default {
   },
   methods: {
     handleClick() {
-      window.$app.to({ app: 'child2', name: 'about', query: {}, params: {} })
+      child1App.to({ app: 'child2', name: 'about', query: {}, params: {} })
     },
     syncUsrsFromMain() {
       const parentApp = window.$parentApp

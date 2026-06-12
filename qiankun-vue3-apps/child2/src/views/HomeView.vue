@@ -32,11 +32,13 @@
 </template>
 
 <script>
+import { child2App } from '@/plugins'
+
 export default {
   name: 'HomeView',
   methods: {
     openChild1Modal() {
-      const { use } = window.$app
+      const { use } = child2App
 
       use({
         name: 'modal',

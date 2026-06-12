@@ -16,8 +16,11 @@ function createChildProps(appKey) {
     $app: window.$app,
     init(opts) {
       if (opts) {
-        window.$app.apps[appKey].window = opts.window
-        window.$app.apps[appKey].vm = opts.vm
+        const slot = window.$app?.apps?.[appKey]
+        if (!slot) return
+        slot.window = opts.window
+        slot.vm = opts.vm
+        slot.$app = opts.$app
       }
     }
   }
@@ -73,7 +76,7 @@ export function ensureAppsRegistered() {
         console.log('qiankun beforeUnmount', app.name)
         const appKey = app.name === 'child1-app' ? 'child1' : app.name === 'child2-app' ? 'child2' : app.name
         const slot = window.$app?.apps?.[appKey]
-        const $app = slot?.window?.$app
+        const $app = slot?.$app || slot?.window?.$app
         if ($app?.onBeforeUnmount) {
           try {
             $app.onBeforeUnmount()
@@ -89,6 +92,7 @@ export function ensureAppsRegistered() {
         if (slot) {
           slot.window = null
           slot.vm = null
+          slot.$app = null
         }
       }
     }

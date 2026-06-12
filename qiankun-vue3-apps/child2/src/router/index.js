@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import { isQiankunRuntime } from '../qiankun'
 
 function getRoutes() {
-  const isQiankun = window.__POWERED_BY_QIANKUN__
+  const isQiankun = isQiankunRuntime()
   const prefix = isQiankun ? '/child2' : ''
   return [
     ...(isQiankun

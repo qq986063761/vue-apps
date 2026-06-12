@@ -4,11 +4,17 @@ import store from './store'
 import { createChildRouter } from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-import plugin, { initWindowParentApp } from './plugins'
+import plugin, { child2App, initWindowParentApp, setupStandaloneAppApi } from './plugins'
+import { isQiankunRuntime, markQiankunRuntime } from './qiankun'
 // 生命周期由 vite.config.js 中的 qiankunBridge 插件从 ES module 导出中桥接
 
 let routerInstance = null
 let vueApp = null
+const qiankunRuntime = isQiankunRuntime(import.meta.url)
+
+if (qiankunRuntime) {
+  markQiankunRuntime()
+}
 
 // 保活缓存：unmount 时不销毁实例，仅移出 DOM；mount 时优先复用
 const instanceCache = { vueApp: null, routerInstance: null, el: null }
@@ -28,7 +34,7 @@ function render(props = {}) {
   vueApp.mount(mountEl)
 
   if (props.init) {
-    props.init({ window, vm: vueApp })
+    props.init({ window, vm: vueApp, $app: child2App })
   }
 }
 
@@ -48,13 +54,14 @@ function restoreFromCache(props) {
   routerInstance = instanceCache.routerInstance
   window.__CHILD_ROUTER_INSTANCE__ = routerInstance
   if (props.init) {
-    props.init({ window, vm: vueApp })
+    props.init({ window, vm: vueApp, $app: child2App })
   }
   return true
 }
 
 // 独立运行时直接渲染
-if (!window.__POWERED_BY_QIANKUN__) {
+if (!qiankunRuntime) {
+  setupStandaloneAppApi()
   initWindowParentApp()
   render()
 }
@@ -64,6 +71,7 @@ export function bootstrap() {
 }
 
 export function mount(props) {
+  markQiankunRuntime()
   window.appName = 'child2'
   console.log('child2 mount', props, window)
   window.__QIANKUN_PROPS__ = props

@@ -13,7 +13,7 @@
       (function() {
         var appName = 'child1-app';
         var publicPath = window.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ || globalThis.__INJECTED_PUBLIC_PATH_BY_QIANKUN__ || 'http://localhost:8081/';
-        var moduleUrl = new URL('src/main.js', publicPath).href;
+        var moduleUrl = new URL('src/main.js?__qiankun__=true', publicPath).href;
         var lifecycleNames = ['bootstrap', 'mount', 'unmount', 'update'];
         var lifecycle = {};
         window.__POWERED_BY_QIANKUN__ = true;
