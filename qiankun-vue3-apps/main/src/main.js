@@ -1,8 +1,4 @@
 window.__APP_CONFIG__ = {
-  federation: {
-    child1: 'http://localhost:8083',
-    child2: 'http://localhost:8084'
-  },
   qiankun: {
     child1: '//localhost:8081',
     child2: '//localhost:8082'

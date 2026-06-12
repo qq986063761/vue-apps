@@ -1,42 +1,65 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import federation from '@originjs/vite-plugin-federation'
+import { federation } from '@module-federation/vite'
 import { resolve } from 'path'
 
-export default defineConfig({
+const remoteDevPorts = {
+  child1: 8081,
+  child2: 8082,
+}
+
+function getRemoteEntry(name, command) {
+  if (command === 'serve') {
+    return `http://localhost:${remoteDevPorts[name]}/remoteEntry.js`
+  }
+  return `./${name}/remoteEntry.js`
+}
+
+export default defineConfig(({ command }) => ({
+  base: './',
   plugins: [
     vue(),
     federation({
       name: 'main',
+      filename: 'remoteEntry.js',
       remotes: {
         child1: {
-          // 运行时从 window.__APP_CONFIG__.federation.child1 读取 origin，
-          // 未设置时退回 http://localhost:8081，避免 config.js 未加载时报错。
-          external: `Promise.resolve(
-            ((window.__APP_CONFIG__?.federation?.child1) || 'http://localhost:8081')
-            + '/assets/remoteEntry.js'
-          )`,
-          externalType: 'promise',
-          format: 'esm',
-          from: 'vite'
+          type: 'module',
+          name: 'child1',
+          entry: getRemoteEntry('child1', command),
+          entryGlobalName: 'child1',
+          shareScope: 'default',
         },
         child2: {
-          external: `Promise.resolve(
-            ((window.__APP_CONFIG__?.federation?.child2) || 'http://localhost:8082')
-            + '/assets/remoteEntry.js'
-          )`,
-          externalType: 'promise',
-          format: 'esm',
-          from: 'vite'
-        }
+          type: 'module',
+          name: 'child2',
+          entry: getRemoteEntry('child2', command),
+          entryGlobalName: 'child2',
+          shareScope: 'default',
+        },
       },
-      shared: ['vue']
-    })
+      shared: {
+        vue: { singleton: false },
+        'vue-router': { singleton: false },
+        vuex: { singleton: false },
+        'element-plus': { singleton: false },
+      },
+      shareStrategy: 'loaded-first',
+      dev: {
+        remoteHmr: true,
+      },
+      dts: false,
+    }),
   ],
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src')
     }
+  },
+  server: {
+    port: 8080,
+    cors: true,
+    origin: 'http://localhost:8080',
   },
   css: {
     preprocessorOptions: {
@@ -47,5 +70,5 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false
-  }
-})
+  },
+}))

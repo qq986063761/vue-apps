@@ -1,18 +1,28 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import federation from '@originjs/vite-plugin-federation'
+import { federation } from '@module-federation/vite'
 import qiankun from 'vite-plugin-qiankun'
 import { resolve } from 'path'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? './' : '/',
   plugins: [
     vue(),
     qiankun('child2-app', { useDevMode: true }),
     federation({
       name: 'child2',
       filename: 'remoteEntry.js',
-      shared: ['vue']
-    })
+      shared: {
+        vue: { singleton: false },
+        'vue-router': { singleton: false },
+        vuex: { singleton: false },
+        'element-plus': { singleton: false },
+      },
+      dev: {
+        remoteHmr: true,
+      },
+      dts: false,
+    }),
   ],
   resolve: {
     alias: {
@@ -22,6 +32,7 @@ export default defineConfig({
   server: {
     port: 8082,
     cors: true,
+    origin: 'http://localhost:8082',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
@@ -29,7 +40,7 @@ export default defineConfig({
     }
   },
   preview: {
-    port: 8084,
+    port: 8082,
     cors: true,
     headers: {
       'Access-Control-Allow-Origin': '*'
@@ -39,5 +50,5 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false
-  }
-})
+  },
+}))

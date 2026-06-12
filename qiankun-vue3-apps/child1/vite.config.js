@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import federation from '@originjs/vite-plugin-federation'
+import { federation } from '@module-federation/vite'
 import qiankun from 'vite-plugin-qiankun-lite'
 import { resolve } from 'path'
 
@@ -15,8 +15,7 @@ function patchQiankunSandbox() {
       if (!target || !target.transform) return
       const original = target.transform
       target.transform = function(code, id, options) {
-        // node_modules 和 Module Federation 生成的虚拟/产物文件不走沙箱转换：
-        // remoteEntry 和 __federation__ 虚拟模块在主应用上下文运行，不存在 __QIANKUN_WINDOW__
+        // node_modules 和 Module Federation 生成的虚拟/产物文件不走沙箱转换
         if (id.includes('node_modules')) return null
         if (id.includes('__federation__') || id.includes('remoteEntry')) return null
         return original.call(this, code, id, options)
@@ -25,7 +24,8 @@ function patchQiankunSandbox() {
   }
 }
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? './' : '/',
   plugins: [
     vue(),
     qiankun({
@@ -39,8 +39,17 @@ export default defineConfig({
       exposes: {
         './export': './src/plugins/export.js'
       },
-      shared: ['vue']
-    })
+      shared: {
+        vue: { singleton: false },
+        'vue-router': { singleton: false },
+        vuex: { singleton: false },
+        'element-plus': { singleton: false },
+      },
+      dev: {
+        remoteHmr: true,
+      },
+      dts: false,
+    }),
   ],
   resolve: {
     alias: {
@@ -50,6 +59,7 @@ export default defineConfig({
   server: {
     port: 8081,
     cors: true,
+    origin: 'http://localhost:8081',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
@@ -57,7 +67,7 @@ export default defineConfig({
     }
   },
   preview: {
-    port: 8083,
+    port: 8081,
     cors: true,
     headers: {
       'Access-Control-Allow-Origin': '*'
@@ -67,5 +77,5 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false
-  }
-})
+  },
+}))
